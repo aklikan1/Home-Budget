@@ -1,0 +1,23 @@
+{
+  "name": "home_budget",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Markov"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "js/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.7.7",
+    "angular-resource": "^1.7.7"
+  }
+}

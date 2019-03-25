@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html ng-app="app" lang="pl-PL">
+<head>
+    <meta charset="UTF-8">
+    <title>Month Budget</title>
+</head>
+<body>
+<div ng-controller = "IncomeNameController as incomeNamesCtrl" >
+    <select name="lista">
+        <option ng-repeat="names in incomeNamesCtrl.incomeNamesGet">{{names.name}}</option>
+    </select>
+    <select name="lista">
+        <option ng-repeat="names in incomeNamesCtrl.incomeDetailsGet">{{names.name}}</option>
+    </select>
+    <select name="lista">
+        <option ng-repeat="names in incomeNamesCtrl.incomeBudgetsGet">{{names.descriptions}}</option>
+    </select>
+    <select name="lista">
+        <option>{{incomeNamesCtrl.getUserById.username }}</option>
+    </select>
+</div>
+<div ng-controller = "IncomeNameController as incomeNamesCtrl">
+    <form>
+        <input type="date" ng-model="incomeNamesCtrl.incomeBudget.date" placeholder="Date" required="required"><br>
+        <input type="text" ng-model="incomeNamesCtrl.incomeBudget.descriptions" placeholder="Description"><br>
+        <input type="number" ng-model="incomeNamesCtrl.incomeBudget.money" placeholder="money" required="required"><br>
+        <button ng-click="incomeNamesCtrl.addIncomeBudget(incomeNamesCtrl.incomeBudget)">Add IncomeBudget</button>
+    </form>
+</div>
+
+<script type="text/javascript" src="js/lib/angular/angular.js"></script>
+<script type="text/javascript" src="js/lib/angular-resource/angular-resource.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
+</body>
+</html>
