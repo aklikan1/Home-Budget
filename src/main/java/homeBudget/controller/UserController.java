@@ -14,7 +14,6 @@ import homeBudget.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api/user")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserController {
 	
 	private UserRepository userRepository;
@@ -25,7 +24,7 @@ public class UserController {
 	}
 
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<User> getUserById (@PathVariable Long id) {
+	public ResponseEntity<User> getUserByIdCtrl (@PathVariable Long id) {
 		User user = userRepository.findById(id).get();
 		return  ResponseEntity.ok(user);
 	}

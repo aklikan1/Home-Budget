@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.7.7
+ * @license AngularJS v1.7.8
  * (c) 2010-2018 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -99,7 +99,7 @@ function isValidObjectMaxDepth(maxDepth) {
 function minErr(module, ErrorConstructor) {
   ErrorConstructor = ErrorConstructor || Error;
 
-  var url = 'https://errors.angularjs.org/1.7.7/';
+  var url = 'https://errors.angularjs.org/1.7.8/';
   var regex = url.replace('.', '\\.') + '[\\s\\S]*';
   var errRegExp = new RegExp(regex, 'g');
 
@@ -2020,7 +2020,7 @@ function reloadWithDebugInfo() {
 function getTestability(rootElement) {
   var injector = angular.element(rootElement).injector();
   if (!injector) {
-    throw ngMinErr('getUserById',
+    throw ngMinErr('test',
       'no injector found for element argument to getTestability');
   }
   return injector.get('$$testability');
@@ -2108,7 +2108,7 @@ function assertArgFn(arg, name, acceptArrayAnnotation) {
 
 /**
  * throw error if the name given is hasOwnProperty
- * @param  {String} name    the name to getUserById
+ * @param  {String} name    the name to test
  * @param  {String} context the context in which the name is used, such as module or directive
  */
 function assertNotHasOwnProperty(name, context) {
@@ -2805,11 +2805,11 @@ function toDebugString(obj, maxDepth) {
 var version = {
   // These placeholder strings will be replaced by grunt's `build` task.
   // They need to be double- or single-quoted.
-  full: '1.7.7',
+  full: '1.7.8',
   major: 1,
   minor: 7,
-  dot: 7,
-  codeName: 'kingly-exiting'
+  dot: 8,
+  codeName: 'enthusiastic-oblation'
 };
 
 
@@ -2959,7 +2959,7 @@ function publishExternalAPI(angular) {
       });
     }
   ])
-  .info({ angularVersion: '1.7.7' });
+  .info({ angularVersion: '1.7.8' });
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -6795,7 +6795,7 @@ function Browser(window, document, $log, $sniffer, $$taskTrackerFactory) {
    * @description
    * Executes a fn asynchronously via `setTimeout(fn, delay)`.
    *
-   * Unlike when calling `setTimeout` directly, in getUserById this function is mocked and instead of using
+   * Unlike when calling `setTimeout` directly, in test this function is mocked and instead of using
    * `setTimeout` in tests, the fns are queued in an array, which can be programmatically flushed
    * via `$browser.defer.flush()`.
    *
@@ -6964,7 +6964,7 @@ function $CacheFactoryProvider() {
        *    }]);
        * ```
        *
-       * Example getUserById:
+       * Example test:
        *
        * ```js
        *  it('should behave like a cache', inject(function(superCache) {
@@ -10032,7 +10032,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       } catch (e) {
         // turns out that under some circumstances IE9 throws errors when one attempts to read
         // comment's node value.
-        // Just ignore it and continue. (Can't seem to reproduce in getUserById case.)
+        // Just ignore it and continue. (Can't seem to reproduce in test case.)
       }
     }
 
@@ -12032,7 +12032,7 @@ function defaultHttpResponseTransform(data, headers) {
 
 function isJsonLike(str) {
     var jsonStart = str.match(JSON_START);
-    return jsonStart && JSON_ENDS[jsonStart[0]].getUserById(str);
+    return jsonStart && JSON_ENDS[jsonStart[0]].test(str);
 }
 
 /**
@@ -16259,10 +16259,10 @@ function findConstantAndWatchExpressions(ast, $filter, parentIsPure) {
     ast.toWatch = ast.constant ? [] : [ast];
     break;
   case AST.ConditionalExpression:
-    findConstantAndWatchExpressions(ast.getUserById, $filter, astIsPure);
+    findConstantAndWatchExpressions(ast.test, $filter, astIsPure);
     findConstantAndWatchExpressions(ast.alternate, $filter, astIsPure);
     findConstantAndWatchExpressions(ast.consequent, $filter, astIsPure);
-    ast.constant = ast.getUserById.constant && ast.alternate.constant && ast.consequent.constant;
+    ast.constant = ast.test.constant && ast.alternate.constant && ast.consequent.constant;
     ast.toWatch = ast.constant ? [] : [ast];
     break;
   case AST.Identifier:
@@ -16527,7 +16527,7 @@ ASTCompiler.prototype = {
       break;
     case AST.ConditionalExpression:
       intoId = intoId || this.nextId();
-      self.recurse(ast.getUserById, intoId);
+      self.recurse(ast.test, intoId);
       self.if_(intoId, self.lazyRecurse(ast.alternate, intoId), self.lazyRecurse(ast.consequent, intoId));
       recursionFn(intoId);
       break;
@@ -16900,7 +16900,7 @@ ASTInterpreter.prototype = {
       return this['binary' + ast.operator](left, right, context);
     case AST.ConditionalExpression:
       return this['ternary?:'](
-        this.recurse(ast.getUserById),
+        this.recurse(ast.test),
         this.recurse(ast.alternate),
         this.recurse(ast.consequent),
         context
@@ -21422,7 +21422,7 @@ function $$TestabilityProvider() {
      *
      * @description
      * The private $$testability service provides a collection of methods for use when debugging
-     * or by automated getUserById and debugging tools.
+     * or by automated test and debugging tools.
      */
     var testability = {};
 
@@ -26683,7 +26683,7 @@ function createDateInputType(type, regexp, parseDate, format) {
     ctrl.$parsers.push(function(value) {
       if (ctrl.$isEmpty(value)) return null;
 
-      if (regexp.getUserById(value)) {
+      if (regexp.test(value)) {
         // Note: We cannot read ctrl.$modelValue, as there might be a different
         // parser/formatter in the processing chain so that the model
         // contains some different data format!
@@ -35899,15 +35899,21 @@ var requiredDirective = ['$parse', function($parse) {
     require: '?ngModel',
     link: function(scope, elm, attr, ctrl) {
       if (!ctrl) return;
-      var value = attr.required || $parse(attr.ngRequired)(scope);
+      // For boolean attributes like required, presence means true
+      var value = attr.hasOwnProperty('required') || $parse(attr.ngRequired)(scope);
 
-      attr.required = true; // force truthy in case we are on non input element
+      if (!attr.ngRequired) {
+        // force truthy in case we are on non input element
+        // (input elements do this automatically for boolean attributes like required)
+        attr.required = true;
+      }
 
       ctrl.$validators.required = function(modelValue, viewValue) {
         return !value || !ctrl.$isEmpty(viewValue);
       };
 
       attr.$observe('required', function(newVal) {
+
         if (value !== newVal) {
           value = newVal;
           ctrl.$validate();
@@ -36044,7 +36050,7 @@ var patternDirective = ['$parse', function($parse) {
 
         ctrl.$validators.pattern = function(modelValue, viewValue) {
           // HTML5 pattern constraint validates the input value, so we validate the viewValue
-          return ctrl.$isEmpty(viewValue) || isUndefined(regexp) || regexp.getUserById(viewValue);
+          return ctrl.$isEmpty(viewValue) || isUndefined(regexp) || regexp.test(viewValue);
         };
       };
     }

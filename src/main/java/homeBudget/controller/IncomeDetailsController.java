@@ -1,16 +1,16 @@
 package homeBudget.controller;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import homeBudget.model.IncomeDetails;
 import homeBudget.repository.IncomeDetailsRepository;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/incomeDetails")
@@ -24,9 +24,20 @@ public class IncomeDetailsController {
 	}
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	ResponseEntity<List<IncomeDetails>> allIncomeDetails () {
+	public ResponseEntity<List<IncomeDetails>> allIncomeDetails () {
 		List<IncomeDetails> incomeDetails = incomeDetailsRepository.findAll();
 		return ResponseEntity.ok(incomeDetails);
+	}
+
+	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> saveIncomeDetails (@RequestBody IncomeDetails incomeDetails) {
+		IncomeDetails save = incomeDetailsRepository.save(incomeDetails);
+		URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("{id}")
+				.buildAndExpand(save.getId())
+				.toUri();
+		return ResponseEntity.created(location).body(save);
 	}
 	
 }

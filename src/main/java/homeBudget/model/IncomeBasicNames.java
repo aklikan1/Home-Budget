@@ -1,40 +1,39 @@
 package homeBudget.model;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class IncomeBasicNames {
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "income_id")
+	@Column(name = "income_name_id")
 	private Long id;
 	@NotNull
 	@Column(nullable = false, length=30)
 	private String name;
-	
-	@ManyToMany (mappedBy = "incomeBasicNames")
-	private List<BudgetIncome> budgetIncomes;
+	@NotNull
+	@Column(nullable = false)
+	private Integer estimated_money;
+
 	@ManyToOne
-	@JoinColumn(name="user_id")
-	private User user;
-	
-	
+	@JoinColumn(name = "budget_id")
+	private Budget budget;
+
+	@OneToMany (mappedBy = "incomeBasicNames")
+	@JsonIgnore
+	private List <IncomeDetails> incomeDetails;
+
 	public IncomeBasicNames() {}
 
-	public IncomeBasicNames(@NotNull String name) {
+	public IncomeBasicNames(@NotNull String name, @NotNull Integer estimated_money) {
 		this.name = name;
+		this.estimated_money = estimated_money;
 	}
 
 	public Long getId() {
@@ -53,70 +52,55 @@ public class IncomeBasicNames {
 		this.name = name;
 	}
 
-	public List<BudgetIncome> getBudgetIncomes() {
-		return budgetIncomes;
+	public Integer getEstimated_money() {
+		return estimated_money;
 	}
 
-	public void setBudgetIncomes(List<BudgetIncome> budgetIncomes) {
-		this.budgetIncomes = budgetIncomes;
+	public void setEstimated_money(Integer estimated_money) {
+		this.estimated_money = estimated_money;
 	}
 
-	public User getUser() {
-		return user;
+	public Budget getBudget() {
+		return budget;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setBudget(Budget budget) {
+		this.budget = budget;
+	}
+
+	public List<IncomeDetails> getIncomeDetails() {
+		return incomeDetails;
+	}
+
+	public void setIncomeDetails(List<IncomeDetails> incomeDetails) {
+		this.incomeDetails = incomeDetails;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		IncomeBasicNames that = (IncomeBasicNames) o;
+		return Objects.equals(id, that.id) &&
+				Objects.equals(name, that.name) &&
+				Objects.equals(estimated_money, that.estimated_money) &&
+				Objects.equals(budget, that.budget) &&
+				Objects.equals(incomeDetails, that.incomeDetails);
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((budgetIncomes == null) ? 0 : budgetIncomes.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		IncomeBasicNames other = (IncomeBasicNames) obj;
-		if (budgetIncomes == null) {
-			if (other.budgetIncomes != null)
-				return false;
-		} else if (!budgetIncomes.equals(other.budgetIncomes))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (user == null) {
-			if (other.user != null)
-				return false;
-		} else if (!user.equals(other.user))
-			return false;
-		return true;
+		return Objects.hash(id, name, estimated_money, budget, incomeDetails);
 	}
 
 	@Override
 	public String toString() {
-		return "IncomeBasicNames [id=" + id + ", name=" + name + ", budgetIncomes=" + budgetIncomes + ", user=" + user
-				+ "]";
+		return "IncomeBasicNames{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", estimated_money=" + estimated_money +
+				", budget=" + budget +
+				", incomeDetails=" + incomeDetails +
+				'}';
 	}
-
-	
 }

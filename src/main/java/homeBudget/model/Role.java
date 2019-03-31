@@ -1,10 +1,10 @@
 package homeBudget.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Role {
@@ -15,13 +15,24 @@ public class Role {
 	private Long id;
 	private String role_name;
 	private String description;
-	
+
+	@ManyToMany(mappedBy = "role")
+	@JsonIgnore
+	private List<User> user;
+
 	public Role() {}
 
 	public Role(String role_name, String description) {
-		super();
 		this.role_name = role_name;
 		this.description = description;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getRole_name() {
@@ -40,42 +51,36 @@ public class Role {
 		this.description = description;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((role_name == null) ? 0 : role_name.hashCode());
-		return result;
+	public List<User> getUser() {
+		return user;
+	}
+
+	public void setUser(List<User> user) {
+		this.user = user;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Role other = (Role) obj;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
-		if (role_name == null) {
-			if (other.role_name != null)
-				return false;
-		} else if (!role_name.equals(other.role_name))
-			return false;
-		return true;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Role role = (Role) o;
+		return Objects.equals(id, role.id) &&
+				Objects.equals(role_name, role.role_name) &&
+				Objects.equals(description, role.description) &&
+				Objects.equals(user, role.user);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, role_name, description, user);
 	}
 
 	@Override
 	public String toString() {
-		return "Role [role_name=" + role_name + ", description=" + description + "]";
+		return "Role{" +
+				"id=" + id +
+				", role_name='" + role_name + '\'' +
+				", description='" + description + '\'' +
+				'}';
 	}
-	
-	
 }
-

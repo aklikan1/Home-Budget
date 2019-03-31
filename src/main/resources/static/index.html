@@ -12,19 +12,16 @@
     <select name="lista">
         <option ng-repeat="names in incomeNamesCtrl.incomeDetailsGet">{{names.name}}</option>
     </select>
-    <select name="lista">
-        <option ng-repeat="names in incomeNamesCtrl.incomeBudgetsGet">{{names.descriptions}}</option>
-    </select>
-    <select name="lista">
-        <option>{{incomeNamesCtrl.getUserById.username }}</option>
-    </select>
-</div>
-<div ng-controller = "IncomeNameController as incomeNamesCtrl">
+    <br>
     <form>
-        <input type="date" ng-model="incomeNamesCtrl.incomeBudget.date" placeholder="Date" required="required"><br>
-        <input type="text" ng-model="incomeNamesCtrl.incomeBudget.descriptions" placeholder="Description"><br>
-        <input type="number" ng-model="incomeNamesCtrl.incomeBudget.money" placeholder="money" required="required"><br>
-        <button ng-click="incomeNamesCtrl.addIncomeBudget(incomeNamesCtrl.incomeBudget)">Add IncomeBudget</button>
+        <input type="number" ng-model="incomeNamesCtrl.incomeDetails.estimate" placeholder="estimate value"><br>
+        <input type="text" ng-model="incomeNamesCtrl.incomeDetails.name" placeholder="Detail name" required="required"><br>
+        <button ng-click="incomeNamesCtrl.addIncomeDetails(incomeNamesCtrl.incomeDetails)">Add Income Details</button>
+    </form>
+    <br>
+    <form>
+        <input type="text" ng-model="incomeNamesCtrl.incomeBasicName.name" placeholder="Detail name" required="required"><br>
+        <button ng-click="incomeNamesCtrl.addIncomeBasicNames(incomeNamesCtrl.incomeBasicName)">Add Income Basic Name</button>
     </form>
 </div>
 
