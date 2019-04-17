@@ -6,8 +6,10 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -32,13 +34,13 @@ public class User {
     @JsonIgnore
     private List<Budget> budget;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @Fetch(FetchMode.SELECT)
     @JoinTable(name="mm_User_Role",
                 joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
                 inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")}
                 )
-    private List<Role> role;
+    private Set<Role> roles = new HashSet<>();
 
     public User() {}
 
@@ -97,12 +99,12 @@ public class User {
         this.budget = budget;
     }
 
-    public List<Role> getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(List<Role> role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
@@ -116,12 +118,12 @@ public class User {
                 Objects.equals(password, user.password) &&
                 Objects.equals(descriptions, user.descriptions) &&
                 Objects.equals(budget, user.budget) &&
-                Objects.equals(role, user.role);
+                Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, is_active, descriptions, budget, role);
+        return Objects.hash(id, username, password, is_active, descriptions, budget, roles);
     }
 
     @Override
@@ -132,7 +134,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", is_active=" + is_active +
                 ", descriptions='" + descriptions + '\'' +
-                ", role=" + role +
+                ", budget=" + budget +
+                ", roles=" + roles +
                 '}';
     }
 }

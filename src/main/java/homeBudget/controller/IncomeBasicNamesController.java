@@ -29,6 +29,12 @@ public class IncomeBasicNamesController {
 		return ResponseEntity.ok(incomeBasicNames);
 	}
 
+	@GetMapping (path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<IncomeBasicNames> getIncomeBasicNamesById(@PathVariable Long id) {
+		IncomeBasicNames incomeBasicNames = incomeBasicNamesRepository.findById(id).get();
+		return ResponseEntity.ok(incomeBasicNames);
+	}
+
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> saveIncomeBasicNames (@RequestBody IncomeBasicNames incomeBasicNames) {
 		IncomeBasicNames save = incomeBasicNamesRepository.save(incomeBasicNames);

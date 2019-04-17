@@ -5,28 +5,15 @@
     <title>Month Budget</title>
 </head>
 <body>
-<div ng-controller = "IncomeNameController as incomeNamesCtrl" >
-    <select name="lista">
-        <option ng-repeat="names in incomeNamesCtrl.incomeNamesGet">{{names.name}}</option>
-    </select>
-    <select name="lista">
-        <option ng-repeat="names in incomeNamesCtrl.incomeDetailsGet">{{names.name}}</option>
-    </select>
-    <br>
-    <form>
-        <input type="number" ng-model="incomeNamesCtrl.incomeDetails.estimate" placeholder="estimate value"><br>
-        <input type="text" ng-model="incomeNamesCtrl.incomeDetails.name" placeholder="Detail name" required="required"><br>
-        <button ng-click="incomeNamesCtrl.addIncomeDetails(incomeNamesCtrl.incomeDetails)">Add Income Details</button>
-    </form>
-    <br>
-    <form>
-        <input type="text" ng-model="incomeNamesCtrl.incomeBasicName.name" placeholder="Detail name" required="required"><br>
-        <button ng-click="incomeNamesCtrl.addIncomeBasicNames(incomeNamesCtrl.incomeBasicName)">Add Income Basic Name</button>
-    </form>
-</div>
+    <a href="#!list">HomePage</a>
+    <a href="#!new">Add new budget</a>
+    <a href="#!login" ng-show="authenticated">Logout </a>
+
+    <div ng-view></div>
 
 <script type="text/javascript" src="js/lib/angular/angular.js"></script>
 <script type="text/javascript" src="js/lib/angular-resource/angular-resource.js"></script>
+<script type="text/javascript" src="js/lib/angular-route/angular-route.js"></script>
 <script type="text/javascript" src="js/app.js"></script>
 </body>
 </html>

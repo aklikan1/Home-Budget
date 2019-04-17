@@ -1,6 +1,7 @@
 package homeBudget.controller;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import homeBudget.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,19 @@ public class UserController {
 		this.userRepository = userRepository;
 	}
 
+	/*
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<User> getUserByIdCtrl (@PathVariable Long id) {
 		User user = userRepository.findById(id).get();
-		return  ResponseEntity.ok(user);
+		return ResponseEntity.ok(user);
 	}
+	 */
+
+	@GetMapping(path = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<User> getUserByUsernameCtrl (@PathVariable String username) {
+		User user = userRepository.findUserByUsername(username);
+		return ResponseEntity.ok(user);
+	}
+
+
 }
