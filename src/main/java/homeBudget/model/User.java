@@ -22,7 +22,7 @@ public class User {
     @Column(nullable = false, unique = true, length = 20)
     private String username;
     @NotNull
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 500)
     private String password;
     @NotNull
     @Column(nullable = false, columnDefinition = "TINYINT(1)")

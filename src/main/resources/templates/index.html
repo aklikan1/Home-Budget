@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html ng-app="app" lang="pl-PL">
+<html ng-app="app" lang="pl-PL" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Month Budget</title>
 </head>
 <body>
-    <a href="#!list">HomePage</a>
-    <a href="#!new">Add new budget</a>
-    <a href="#!login" ng-show="authenticated">Logout </a>
+<a href="#!list">HomePage</a>
+<a href="#!new" ng-show="authenticated">Add new budget</a>
+<a href="#!login" ng-show="authenticated">Logout </a>
+<a href="#!login" ng-show="!authenticated">Login</a>
+<a th:href="@{/register}">Register</a>
 
-    <div ng-view></div>
+<div ng-view></div>
 
 <script type="text/javascript" src="js/lib/angular/angular.js"></script>
 <script type="text/javascript" src="js/lib/angular-resource/angular-resource.js"></script>

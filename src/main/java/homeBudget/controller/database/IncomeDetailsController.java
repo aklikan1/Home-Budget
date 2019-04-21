@@ -1,4 +1,4 @@
-package homeBudget.controller;
+package homeBudget.controller.database;
 
 import java.net.URI;
 import java.util.List;

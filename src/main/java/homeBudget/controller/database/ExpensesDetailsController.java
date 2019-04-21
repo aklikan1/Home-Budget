@@ -1,4 +1,4 @@
-package homeBudget.controller;
+package homeBudget.controller.database;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

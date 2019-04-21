@@ -16,6 +16,11 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+    public UserService (PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Autowired
     public void setUserRepository (UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -28,6 +33,9 @@ public class UserService {
     public User addWithDefaultRole (User user) {
         Role defaultRole = roleRepository.findByRoles(DEFAULT_ROLE);
         user.getRoles().add(defaultRole);
+        String passwordHash = passwordEncoder.encode(user.getPassword());
+        user.setPassword(passwordHash);
+        user.setIs_active(true);
         return user;
     }
 }
