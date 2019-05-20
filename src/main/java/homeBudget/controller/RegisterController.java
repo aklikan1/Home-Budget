@@ -10,4 +10,6 @@ public class RegisterController {
     public String home () {
         return "register.html";
     }
+
+
 }

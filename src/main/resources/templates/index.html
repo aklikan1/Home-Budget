@@ -11,7 +11,8 @@
 <a href="#!login" ng-show="!authenticated">Login</a>
 <a th:href="@{/register}">Register</a>
 
-<div ng-view></div>
+<div ng-view ng-controller="IndexController"></div>
+
 
 <script type="text/javascript" src="js/lib/angular/angular.js"></script>
 <script type="text/javascript" src="js/lib/angular-resource/angular-resource.js"></script>

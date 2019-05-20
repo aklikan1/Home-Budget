@@ -15,6 +15,7 @@ import homeBudget.repository.UserRepository;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/user")
@@ -53,5 +54,10 @@ public class UserController {
 				.buildAndExpand(save.getId())
 				.toUri();
 		return ResponseEntity.created(location).body(save);
+	}
+
+	@GetMapping(path = "/userAuth", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Principal> userAuthentication (Principal userPrincipal) {
+		return ResponseEntity.ok(userPrincipal);
 	}
 }

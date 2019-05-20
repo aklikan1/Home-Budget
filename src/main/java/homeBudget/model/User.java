@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
@@ -25,7 +26,7 @@ public class User {
     @Column(nullable = false, length = 500)
     private String password;
     @NotNull
-    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(nullable = false, columnDefinition = "TINYINT(1)", name = "active")
     private boolean is_active;
     @Column(length = 300)
     private String descriptions;
