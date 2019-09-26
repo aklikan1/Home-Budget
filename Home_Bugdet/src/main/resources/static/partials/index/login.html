@@ -1,0 +1,16 @@
+<div ng-show="!authenticated">
+    <h1>Please Login</h1>
+    <form>
+        <input type="text" ng-model="authController.credentials.username"><br>
+        <input type="password" ng-model="authController.credentials.password"><br>
+        <button type="button" ng-click="authController.login()">Login</button>
+    </form>
+</div>
+<br>
+<div ng-show="loginErrorMessage" style="color: red">
+    <h2>Login or password is incorrect. Please try again</h2>
+</div>
+<div ng-show="authenticated">
+    <h2>Do you really want to logout?</h2>
+    <a href="" ng-click="authController.logout()">Logout</a>
+</div>

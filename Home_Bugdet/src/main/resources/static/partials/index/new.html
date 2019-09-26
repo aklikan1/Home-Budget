@@ -1,0 +1,11 @@
+<div ng-show="authenticated">
+    <h1>Add new budget</h1>
+    <form>
+        <input type="text" placeholder="Budget name" ng-model="newBudgetCtrl.budget.name">
+        <button ng-click="newBudgetCtrl.saveBudget()">Add new Budget</button>
+    </form>
+</div>
+<div ng-show="!authenticated">
+    <h2>Please login to add new budget</h2>
+    <a href="#!login">Login</a>
+</div>

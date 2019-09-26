@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row">
+    <div class="offset-3"></div>
+    <div class="col-md-6">
+      <form name="form" #f='ngForm' novalidate class="add-budget-form">
+        <!-- name -->
+        <div class="form-group">
+          <label for="name">Name of incoming detail</label>
+          <input type="text" id="name" class="form-control" name="name" placeholder="Incoming detail name"/>
+        </div>
+
+        <!--Descriptions-->
+        <div class="form-group">
+          <label for="descriptions">Descriptions</label>
+          <input type="text" id="descriptions" class="form-control" name="descriptions" placeholder="descriptions"/>
+        </div>
+
+        <!-- date -->
+        <div class="form-group">
+          <label for="date">Date</label>
+          <input type="date" id="date" class="form-control" name="date"/>
+        </div>
+
+        <!-- money -->
+        <div class="form-group">
+          <label for="money">Money</label>
+          <input type="number" id="money" class="form-control" name="money"/>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
