@@ -23,9 +23,17 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
-            "scripts": ["node_modules/jquery/dist/jquery.min.js"],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/assets/sass"
+              ]
+            },
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/rellax/rellax.min.js"
+            ],
             "es5BrowserSupport": true
           },
           "configurations": {
@@ -80,9 +88,13 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/styles.css"
+              "src/styles.scss",
+              "src/assets/sass/now-ui-kit.scss",
+              "src/assets/css/demo.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/rellax/rellax.min.js"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -132,5 +144,14 @@
       }
     }
   },
-  "defaultProject": "Home-Budget-app"
+  "defaultProject": "Home-Budget-app",
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "app",
+      "styleext": "scss"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "app"
+    }
+  }
 }

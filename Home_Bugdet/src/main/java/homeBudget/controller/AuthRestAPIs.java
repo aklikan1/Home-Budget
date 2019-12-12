@@ -1,5 +1,6 @@
 package homeBudget.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import homeBudget.message.request.LoginForm;
 import homeBudget.message.request.SignUpForm;
 import homeBudget.message.response.JwtResponse;
@@ -60,8 +61,9 @@ public class AuthRestAPIs {
 
         String jwt = jwtProvider.generateJwtToken(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userRepository.findUserByUsername(loginRequest.getUsername());
 
-        return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), userDetails.getAuthorities()));
+        return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), userDetails.getAuthorities(), Long.toString(user.getId())));
     }
 
     @PostMapping("/signup")
@@ -103,6 +105,7 @@ public class AuthRestAPIs {
         });
 
         user.setRoles(roles);
+        user.setActive(true);
         userRepository.save(user);
 
         return new ResponseEntity<>(new ResponseMessage("User registered successfully!"), HttpStatus.OK);

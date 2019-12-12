@@ -99,8 +99,6 @@ public class IncomeBasicNames {
 				"id=" + id +
 				", name='" + name + '\'' +
 				", estimated_money=" + estimated_money +
-				", budget=" + budget +
-				", incomeDetails=" + incomeDetails +
 				'}';
 	}
 }

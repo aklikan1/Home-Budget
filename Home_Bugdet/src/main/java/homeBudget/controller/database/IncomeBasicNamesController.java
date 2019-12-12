@@ -12,9 +12,11 @@ import homeBudget.model.IncomeBasicNames;
 import homeBudget.repository.IncomeBasicNamesRepository;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.print.attribute.standard.Media;
+
 @RestController
 @RequestMapping("/api/incomeBasicNames")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200")
 public class IncomeBasicNamesController {
 	
 	private IncomeBasicNamesRepository incomeBasicNamesRepository;
@@ -33,6 +35,12 @@ public class IncomeBasicNamesController {
 	@GetMapping (path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<IncomeBasicNames> getIncomeBasicNamesById(@PathVariable Long id) {
 		IncomeBasicNames incomeBasicNames = incomeBasicNamesRepository.findById(id).get();
+		return ResponseEntity.ok(incomeBasicNames);
+	}
+
+	@GetMapping(path = "/budget/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<IncomeBasicNames>> getIncomeBasicNamesByBudgetId(@PathVariable Long id) {
+		List<IncomeBasicNames> incomeBasicNames = incomeBasicNamesRepository.getAllByBudgetId(id);
 		return ResponseEntity.ok(incomeBasicNames);
 	}
 

@@ -1,5 +1,6 @@
 package homeBudget.model;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -21,7 +22,7 @@ public class ExpensesDetails {
 	@NotNull
 	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
-	private Date date;
+	private Calendar date;
 	@Column(length = 300)
 	private String descriptions;
 	@NotNull
@@ -34,7 +35,7 @@ public class ExpensesDetails {
 
 	public ExpensesDetails() {}
 
-	public ExpensesDetails(@NotNull String name, @NotNull Date date, String descriptions, @NotNull Integer money) {
+	public ExpensesDetails(@NotNull String name, @NotNull Calendar date, String descriptions, @NotNull Integer money) {
 		this.name = name;
 		this.date = date;
 		this.descriptions = descriptions;
@@ -57,11 +58,11 @@ public class ExpensesDetails {
 		this.name = name;
 	}
 
-	public Date getDate() {
+	public Calendar getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(Calendar date) {
 		this.date = date;
 	}
 

@@ -44,10 +44,9 @@ public class User {
     @Size(min=6, max = 100)
     private String password;
 
-    /*
     @NotNull
     @Column(nullable = false, columnDefinition = "TINYINT(1)", name = "active")
-    private boolean is_active;
+    private boolean active;
 
     @Column(length = 300)
     private String descriptions;
@@ -55,8 +54,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Budget> budget;
-
-     */
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="user_roles",
@@ -120,5 +117,13 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

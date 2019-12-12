@@ -2,6 +2,7 @@ package homeBudget.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -19,7 +20,7 @@ public class IncomeDetails {
 	@NotNull
 	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
-	private Date date;
+	private Calendar date;
 	@Column(length = 150)
 	private String descriptions;
 	@NotNull
@@ -32,7 +33,7 @@ public class IncomeDetails {
 
 	public IncomeDetails() {}
 
-	public IncomeDetails(@NotNull String name, @NotNull Date date, String descriptions, @NotNull Integer money) {
+	public IncomeDetails(@NotNull String name, @NotNull Calendar date, String descriptions, @NotNull Integer money) {
 		this.name = name;
 		this.date = date;
 		this.descriptions = descriptions;
@@ -55,11 +56,11 @@ public class IncomeDetails {
 		this.name = name;
 	}
 
-	public Date getDate() {
+	public Calendar getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(Calendar date) {
 		this.date = date;
 	}
 

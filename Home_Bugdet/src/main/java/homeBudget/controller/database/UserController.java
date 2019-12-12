@@ -35,12 +35,6 @@ public class UserController {
 	}
 	 */
 
-	@GetMapping(path = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<User> getUserByUsernameCtrl (@PathVariable String username) {
-		User user = userRepository.findUserByUsername(username);
-		return ResponseEntity.ok(user);
-	}
-
 	@PostMapping(path = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> saveUser (@RequestBody User user) {
 		//User userWithDefaultRole = userService.addWithDefaultRole(user);

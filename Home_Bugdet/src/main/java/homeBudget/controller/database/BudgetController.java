@@ -35,6 +35,12 @@ public class BudgetController {
         return ResponseEntity.ok(budget);
     }
 
+    @GetMapping(path = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Budget>> getAllBudgetsByUserId (@PathVariable Long id) {
+        List<Budget> budgets = budgetRepository.getAllByUserId(id);
+        return ResponseEntity.ok(budgets);
+    }
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?>saveBudget(@RequestBody Budget budget) {
         Budget save = budgetRepository.save(budget);
