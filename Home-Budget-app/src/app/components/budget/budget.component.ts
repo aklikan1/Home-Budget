@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Budget} from "../BudgetComponents/pages/dashboard/model/budget";
-import {ApiService} from "../shared/api.service";
+import {GetApiService} from "../shared/get-api.service";
 
 @Component({
   selector: 'app-budget',
@@ -10,7 +10,7 @@ import {ApiService} from "../shared/api.service";
 export class BudgetComponent implements OnInit {
   budget: Budget[] = [];
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: GetApiService) { }
 
   ngOnInit() {
     this.getAllBudget();

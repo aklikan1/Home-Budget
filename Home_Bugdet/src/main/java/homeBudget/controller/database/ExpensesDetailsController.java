@@ -2,8 +2,6 @@ package homeBudget.controller.database;
 
 import homeBudget.model.ExpensesBasicNames;
 import homeBudget.model.ExpensesDetails;
-import homeBudget.model.IncomeBasicNames;
-import homeBudget.model.IncomeDetails;
 import homeBudget.repository.ExpensesBasicNamesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -11,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import homeBudget.repository.ExpensesDetailsRepository;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,18 +31,42 @@ public class ExpensesDetailsController {
 		this.expensesBasicNamesRepository = expensesBasicNamesRepository;
 	}
 
-	@GetMapping(path = "/budget/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<ExpensesDetails>> getAllExpensesDetailsByBudgetId(@PathVariable Long id) {
-		List<ExpensesDetails> expensesDetails = expensesDetailsByBudgetId(id);
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ExpensesDetails>> getAllExpensesDetails() {
+		List<ExpensesDetails> expensesDetails = expensesDetailsRepository.findAll();
 		return ResponseEntity.ok(expensesDetails);
 	}
 
-	private List<ExpensesDetails> expensesDetailsByBudgetId(Long id) {
-		List<ExpensesDetails> expensesMoney = new ArrayList<>();
-		List<ExpensesBasicNames> expensesBasicNames = expensesBasicNamesRepository.getAllByBudgetId(id);
+	@GetMapping(path = "/budget/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<List<ExpensesDetails>>> getAllExpensesDetailsByBudgetId(@PathVariable Long id) {
+		List<List<ExpensesDetails>> expensesDetails = expensesDetailsByBudgetId(id);
+		return ResponseEntity.ok(expensesDetails);
+	}
+
+	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> saveExpensesDetails (@RequestBody ExpensesDetails expensesDetails) {
+		ExpensesDetails save = expensesDetailsRepository.save(expensesDetails);
+		URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("{id}")
+				.buildAndExpand(save.getId())
+				.toUri();
+		return ResponseEntity.created(location).body(save);
+	}
+
+	@DeleteMapping(path = "/{id}")
+	public ResponseEntity<?>deleteExpensesDetailById (@PathVariable Long id) {
+		expensesDetailsRepository.deleteById(id);
+
+		return ResponseEntity.noContent().build();
+	}
+
+	private List<List<ExpensesDetails>> expensesDetailsByBudgetId(Long id) {
+		List<List<ExpensesDetails>> expensesMoney = new ArrayList<>();
+		List<ExpensesBasicNames> expensesBasicNames = expensesBasicNamesRepository.getAllByBudgetIdOrderByIdAsc(id);
 		for (ExpensesBasicNames expensesBasicName: expensesBasicNames) {
-			List<ExpensesDetails> tempExpensesDetails = expensesDetailsRepository.getAllByExpensesBasicNamesId(expensesBasicName.getId());
-			expensesMoney.addAll(tempExpensesDetails);
+			List<ExpensesDetails> tempExpensesDetails = expensesDetailsRepository.getAllByExpensesBasicNamesIdOrderByIdAsc(expensesBasicName.getId());
+			expensesMoney.add(tempExpensesDetails);
 		}
 
 		return expensesMoney;
@@ -68,6 +92,9 @@ public class ExpensesDetailsController {
 
 		for (int i=11; i>=0; i--) {
 			Calendar actualTime = Calendar.getInstance();
+			if (calendar == Calendar.MONTH) {
+				actualTime.set(Calendar.DAY_OF_MONTH, 31);
+			}
 			actualTime.add(calendar, -i);
 			String changedTime = new SimpleDateFormat("yyyy-MM-dd").format(actualTime.getTime());
 			Long money = 0L;

@@ -1,6 +1,7 @@
 package homeBudget.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,7 @@ public class ExpensesBasicNames {
 
 	@OneToMany (mappedBy = "expensesBasicNames")
 	@JsonIgnore
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE)
 	private List<ExpensesDetails> expensesDetails;
 
 	public ExpensesBasicNames() {}
@@ -101,7 +103,6 @@ public class ExpensesBasicNames {
 				"id=" + id +
 				", name='" + name + '\'' +
 				", estimated_money=" + estimated_money +
-				", budget=" + budget +
 				", expensesDetails=" + expensesDetails +
 				'}';
 	}

@@ -13,9 +13,10 @@ import java.util.List;
 @Repository
 public interface ExpensesBasicNamesRepository extends JpaRepository<ExpensesBasicNames, Long>{
 
-    List<ExpensesBasicNames> getAllByBudgetId (long budgetId);
+    List<ExpensesBasicNames> getAllByBudgetIdOrderByIdAsc(long budgetId);
 
-    @Query(value = "SELECT ebn.expenses_name_id FROM home_budget.expenses_basic_names ebn WHERE ebn.budget_id = :id",
+    @Query(value = "SELECT ebn.expenses_name_id FROM home_budget.expenses_basic_names ebn WHERE ebn.budget_id = :id " +
+            "ORDER BY ebn.expenses_name_id",
             nativeQuery = true)
     List<Long> getExpensesBasicNamesIdByBudgetId (@Param("id") long budgetId);
 }

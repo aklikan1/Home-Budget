@@ -12,8 +12,6 @@ import homeBudget.model.IncomeBasicNames;
 import homeBudget.repository.IncomeBasicNamesRepository;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.print.attribute.standard.Media;
-
 @RestController
 @RequestMapping("/api/incomeBasicNames")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -40,7 +38,7 @@ public class IncomeBasicNamesController {
 
 	@GetMapping(path = "/budget/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<IncomeBasicNames>> getIncomeBasicNamesByBudgetId(@PathVariable Long id) {
-		List<IncomeBasicNames> incomeBasicNames = incomeBasicNamesRepository.getAllByBudgetId(id);
+		List<IncomeBasicNames> incomeBasicNames = incomeBasicNamesRepository.getAllByBudgetIdOrderById(id);
 		return ResponseEntity.ok(incomeBasicNames);
 	}
 
@@ -54,6 +52,13 @@ public class IncomeBasicNamesController {
 				.toUri();
 
 		return ResponseEntity.created(location).body(save);
+	}
+
+	@DeleteMapping(path = "/{id}")
+	public ResponseEntity<?>deleteBasicNameById (@PathVariable Long id) {
+		incomeBasicNamesRepository.deleteById(id);
+
+		return ResponseEntity.noContent().build();
 	}
 }
 

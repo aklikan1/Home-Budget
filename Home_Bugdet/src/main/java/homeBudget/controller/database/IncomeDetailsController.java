@@ -14,7 +14,6 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -35,21 +34,21 @@ public class IncomeDetailsController {
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<IncomeDetails>> getAllIncomeDetails() {
 		List<IncomeDetails> incomeDetails = incomeDetailsRepository.findAll();
+
 		return ResponseEntity.ok(incomeDetails);
 	}
 
 	@GetMapping(path = "/incomeNames/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<IncomeDetails>> getAllIncomeDetailsByIncomeBasicNames(@PathVariable Long id) {
-		List<IncomeDetails> incomeDetails = incomeDetailsRepository.getAllByIncomeBasicNamesId(id);
+	public ResponseEntity<List<IncomeDetails>> getAllIncomeDetailsByIncomeBasicNamesId(@PathVariable Long id) {
+		List<IncomeDetails> incomeDetails = incomeDetailsRepository.getAllByIncomeBasicNamesIdOrderByIdAsc(id);
 		return ResponseEntity.ok(incomeDetails);
 	}
 
 	@GetMapping(path = "/budget/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<IncomeDetails>> getAllIncomeDetailsByBudgetId(@PathVariable Long id) {
-		List<IncomeDetails> incomeDetails = incomeDetailsByBudgetId(id);
+	public ResponseEntity<List<List<IncomeDetails>>> getAllIncomeDetailsByBudgetId(@PathVariable Long id) {
+		List<List<IncomeDetails>> incomeDetails = incomeDetailsByBudgetId(id);
 		return ResponseEntity.ok(incomeDetails);
 	}
-
 
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> saveIncomeDetails (@RequestBody IncomeDetails incomeDetails) {
@@ -62,12 +61,19 @@ public class IncomeDetailsController {
 		return ResponseEntity.created(location).body(save);
 	}
 
-	private List<IncomeDetails> incomeDetailsByBudgetId(Long id) {
-		List<IncomeDetails> incomeMoney = new ArrayList<>();
-		List<IncomeBasicNames> incomeBasicNames = incomeBasicNamesRepository.getAllByBudgetId(id);
+	@DeleteMapping(path = "/{id}")
+	public ResponseEntity<?>deleteIncomeDetailById (@PathVariable Long id) {
+		incomeDetailsRepository.deleteById(id);
+
+		return ResponseEntity.noContent().build();
+	}
+
+	private List<List<IncomeDetails>> incomeDetailsByBudgetId(Long id) {
+		List<List<IncomeDetails>> incomeMoney = new ArrayList<>();
+		List<IncomeBasicNames> incomeBasicNames = incomeBasicNamesRepository.getAllByBudgetIdOrderById(id);
 		for (IncomeBasicNames incomeBasicName: incomeBasicNames) {
-			List<IncomeDetails> tempIncomeDetails = incomeDetailsRepository.getAllByIncomeBasicNamesId(incomeBasicName.getId());
-			incomeMoney.addAll(tempIncomeDetails);
+			List<IncomeDetails> tempIncomeDetails = incomeDetailsRepository.getAllByIncomeBasicNamesIdOrderByIdAsc(incomeBasicName.getId());
+			incomeMoney.add(tempIncomeDetails);
 		}
 
 		return incomeMoney;
@@ -93,6 +99,9 @@ public class IncomeDetailsController {
 
 		for (int i=11; i>=0; i--) {
 			Calendar actualTime = Calendar.getInstance();
+			if (calendar == Calendar.MONTH) {
+				actualTime.set(Calendar.DAY_OF_MONTH, 31);
+			}
 			actualTime.add(calendar, -i);
 			String changedTime = new SimpleDateFormat("yyyy-MM-dd").format(actualTime.getTime());
 			Long money = 0L;

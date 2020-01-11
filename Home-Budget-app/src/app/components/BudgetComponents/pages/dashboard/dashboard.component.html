@@ -3,11 +3,11 @@
   <!-- Budget button -->
   <div class="row" >
     <div class="col-3">
-      <div class="dropdown" ngbDropdown>
+      <div class="btn-group" ngbDropdown>
         <button ngbDropdownToggle class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Budget: {{mainBudgetName}}
         </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" ngbDropdownMenu>
           <button *ngFor="let budget of budgets" type="button" class="dropdown-item"
                   (click)="changeMainBudget(budget.name);totalMoneyInTimeByBudgetId(budget.id);incomeNamesMoneyByBudgetId (budget.id);
                   expensesNamesMoneyByBudgetId(budget.id)">
@@ -378,6 +378,7 @@
         </div>
       </div>
     </div>
+
     <div class=" col-lg-6 col-md-12">
       <div class=" card">
         <div class=" card-header">

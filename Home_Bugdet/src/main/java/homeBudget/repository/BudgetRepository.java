@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface BudgetRepository extends JpaRepository<Budget, Long> {
-    List<Budget> getAllByUserId(Long id);
+    List<Budget> getAllByUserIdOrderByIdAsc(Long id);
 }

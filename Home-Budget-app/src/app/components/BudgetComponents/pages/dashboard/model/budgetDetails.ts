@@ -1,8 +1,9 @@
-export interface IncomeDetails {
+export class BudgetDetails {
   id: number;
   date: Date;
   descriptions: string;
   money: number;
   name: string;
-  incomeBasicNamesId: number;
+  incomeBasicNames: any;
+  expensesBasicNames: any;
 }

@@ -1,11 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import Chart from 'chart.js';
-import {ApiService} from '../../../shared/api.service';
+import {GetApiService} from '../../../shared/get-api.service';
 import {TokenStorageService} from '../../../UIComponents/auth/token-storage.service';
-import {Budget} from './model/budget';
-import {IncomeBasicNames} from './model/incomeBasicNames';
-import {IncomeDetails} from './model/incomeDetails';
 import {BasicNamesAndDetailsMoney} from './model/basicNamesAndDetailsMoney';
+import {Budget} from './model/budget';
 
 @Component({
   selector: "app-dashboard",
@@ -53,12 +51,11 @@ export class DashboardComponent implements OnInit {
 
   private userId: string;
   public budgets: Budget[] = [];
-  public incomeBasicNames: IncomeBasicNames[] = [];
   public incomeNamesMoney: BasicNamesAndDetailsMoney[] = [];
   public expensesNamesMoney: BasicNamesAndDetailsMoney[] = [];
   public mainBudgetName: string;
 
-  constructor(private apiService: ApiService, private tokenStorage: TokenStorageService) {}
+  constructor(private apiService: GetApiService, private tokenStorage: TokenStorageService) {}
 
   ngOnInit() {
     this.userId = this.tokenStorage.getUserId();
@@ -598,23 +595,12 @@ export class DashboardComponent implements OnInit {
       budgets => {
         this.budgets = budgets;
         this.mainBudgetName = this.budgets[0].name;
-        this.initialAllIncomeBasicNamesByBudgetId(this.budgets[0].id);
         this.totalMoneyInTimeByBudgetId(this.budgets[0].id);
         this.incomeNamesMoneyByBudgetId(this.budgets[0].id);
         this.expensesNamesMoneyByBudgetId(this.budgets[0].id);
       },
       () => {
         alert("An error has occurred in initialGetAllInfoAboutBudgetsMoneyDetails()");
-      }
-    );
-  }
-
-  private initialAllIncomeBasicNamesByBudgetId (id: number) {
-    this.apiService.getAllIncomeBasicNamesByBudgetId(id).subscribe(
-      incomeBasicNames => {
-        this.incomeBasicNames = incomeBasicNames;
-      }, () => {
-        alert ("An error has occurred in initialAllIncomeBasicNamesByBudgetId()")
       }
     );
   }

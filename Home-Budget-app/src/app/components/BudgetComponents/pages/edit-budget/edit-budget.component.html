@@ -1,1 +1,261 @@
-<p>edit-budget works!</p>
+<div class="content">
+
+  <div class="row" >
+    <div class="col-12">
+      <input name="startDate" id="startDate" class="date-picker" (click)="test()"/>
+      <div class="btn-group" ngbDropdown>
+        <button ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{budgetName}}</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
+          <table>
+            <tr *ngFor="let budget of budgets">
+              <td><button type="button" ngbDropdownItem (click)="getAllDataAndSetActualBudget(budget)">{{budget.name}}</button></td>
+              <td><button type="button" aria-label="Close" class="close text-danger" data-dismiss="modal"
+                          (click)="deleteBudgetById(confirmDeleteModal, budget)">
+                <i class=" tim-icons icon-simple-remove"> </i>
+              </button></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="float-right" data-toggle="buttons">
+        <!-- Edit budget name -->
+        <button type="button" class="btn btn-secondary" (click)="changeBudgetName(budgetNameTemplate, actualBudget)">
+          <i class=" tim-icons icon-pencil"> </i>
+        </button>
+        <!-- Add new budget -->
+        <button type="button" class="btn btn-secondary" (click)="addNewBudget(budgetNameTemplate)">
+          <i class=" tim-icons icon-simple-add"> </i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <!-- Income table -->
+    <div class=" col-lg-6 col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title text-center">Incomes table</h3>
+          <div class="text-center">
+            <div class="btn-group" ngbDropdown placement="bottom-right">
+              <button ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Months</button>
+              <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
+                <button type="month" class="text-center" ngbDropdownItem>All Months</button>
+                <div class="dropdown-divider"></div>
+                <button type="month" class="text-center" ngbDropdownItem>January 2020</button>
+                <button type="button" class="text-center" ngbDropdownItem>December 2019</button>
+                <button type="button" class="text-center" ngbDropdownItem>November 2019</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="">
+          <div class="card-body">
+            <table class="table">
+              <thead class="text-primary">
+              <tr>
+                <th style="width: 40%;">Name</th>
+                <th style="width: 10%;"></th>
+                <th class="text-center" style="width: 20%;">Estimate money / date</th>
+                <th class="text-center" style="width: 25%;">Actual money</th>
+              </tr>
+              </thead>
+              <tbody>
+              <ng-container *ngFor="let incomeName of incomeBasicNames; index as namesIndex">
+                <tr class="tableTrElement">
+                  <td>
+                    <input [readOnly]="incomeName.readOnly" (click)="showOrHideDetails(incomeName)"
+                           (dblclick)="changeReadOnlyWhenDoubleClick(incomeName)" [(ngModel)]="incomeName.name"
+                           (change)="postUpdateIncomeBasicNames(incomeName)"
+                           type="text" class="input-label" id="{{incomeName.id}}-{{incomeName.name}}"
+                           placeholder="Add category...">
+                  </td>
+                  <td>
+                    <button type="button" aria-label="Close" class="close text-danger" data-dismiss="modal"
+                            (click)="deleteBasicNames(confirmDeleteModal, incomeName, namesIndex, INCOME_CATEGORY)">
+                      <i class=" tim-icons icon-simple-remove"> </i>
+                    </button>
+                  </td>
+                  <td class="text-center">
+                    <input type="text" class="input-label text-center"
+                           [(ngModel)]="incomeName.estimated_money" (change)="postUpdateIncomeBasicNames(incomeName)">
+                  </td>
+                  <td class="text-center">{{incomeActualMoney[namesIndex]}}</td>
+                </tr>
+                <ng-container *ngIf="incomeName.isClicked">
+                  <tr *ngFor="let detail of incomeDetails[namesIndex]">
+                    <td>
+                      <input type="text" class="input-label"
+                             [(ngModel)]="detail.name" (change)="postUpdateIncomeDetails(detail)"
+                             placeholder="Add detail...">
+                    </td>
+                    <td>
+                      <button type="button" aria-label="Close" class="close text-danger" data-dismiss="modal"
+                              (click)="deleteDetail(confirmDeleteModal, detail, namesIndex, INCOME_DETAIL)">
+                        <i class=" tim-icons icon-simple-remove"> </i>
+                      </button>
+                    </td>
+                    <td class="text-center">{{addDate(detail.date)}}</td>
+                    <td>
+                      <input type="text" class="input-label text-center"
+                             [(ngModel)]="detail.money" (change)="postUpdateIncomeDetails(detail)">
+                    </td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf="incomeName.isClicked">
+                  <td style="padding-left: 5%">
+                    <button type="button" class="btn btn-secondary"
+                            (click)="postAddNewIncomeDetails(incomeName, namesIndex)">
+                    <i class="tim-icons icon-simple-add"> </i>
+                  </button></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </ng-container>
+
+              <!-- Add new income point -->
+              <tr *ngIf="budgetArrayGreaterThenZero">
+                <td><button type="button" class="btn btn-secondary" (click)="postAddNewIncomeBasicNames()">
+                  <i class="tim-icons icon-simple-add"> </i>
+                </button></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expenses table -->
+    <div class=" col-lg-6 col-md-6">
+      <div class=" card">
+        <div class=" card-header">
+          <h3 class="card-title text-center">Expenses table</h3>
+        </div>
+        <div class="">
+          <div class="card-body">
+            <table class="table">
+              <thead class="text-primary">
+              <tr>
+                <th style="width: 40%;">Name</th>
+                <th style="width: 10%;"></th>
+                <th class="text-center" style="width: 20%;">Estimate money / date</th>
+                <th class="text-center" style="width: 25%;">Actual money</th>
+              </tr>
+              </thead>
+              <tbody>
+              <ng-container *ngFor="let expensesNames of expensesBasicNames; index as namesIndex">
+                <tr class="tableTrElement">
+                  <td>
+                    <input [readOnly]="expensesNames.readOnly" (click)="showOrHideDetails(expensesNames)"
+                           (dblclick)="changeReadOnlyWhenDoubleClick(expensesNames)" [(ngModel)]="expensesNames.name"
+                           (change)="postUpdateExpensesBasicNames(expensesNames)"
+                           type="text" class="input-label" id="{{expensesNames.id}}-{{expensesNames.name}}"
+                           placeholder="Add category...">
+                  </td>
+                  <td>
+                    <button type="button" aria-label="Close" class="close text-danger" data-dismiss="modal"
+                            (click)="deleteBasicNames(confirmDeleteModal, expensesNames, namesIndex, EXPENSES_CATEGORY)">
+                      <i class=" tim-icons icon-simple-remove"> </i>
+                    </button>
+                  </td>
+                  <td class="text-center">
+                    <input type="text" class="input-label text-center"
+                           [(ngModel)]="expensesNames.estimated_money" (change)="postUpdateExpensesBasicNames(expensesNames)">
+                  </td>
+                  <td class="text-center">{{expensesActualMoney[namesIndex]}}</td>
+                </tr>
+                <ng-container *ngIf="expensesNames.isClicked">
+                  <tr *ngFor="let detail of expensesDetails[namesIndex]">
+                    <td>
+                      <input type="text" class="input-label"
+                             [(ngModel)]="detail.name" (change)="postUpdateExpensesDetails(detail)"
+                             placeholder="Add detail...">
+                    </td>
+                    <td>
+                      <button type="button" aria-label="Close" class="close text-danger" data-dismiss="modal"
+                              (click)="deleteDetail(confirmDeleteModal, detail, namesIndex, EXPENSES_DETAIL)">
+                        <i class=" tim-icons icon-simple-remove"> </i>
+                      </button>
+                    </td>
+                    <td class="text-center">{{addDate(detail.date)}}</td>
+                    <td>
+                      <input type="text" class="input-label text-center"
+                             [(ngModel)]="detail.money" (change)="postUpdateExpensesDetails(detail)">
+                    </td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf="expensesNames.isClicked">
+                  <td style="padding-left: 5%">
+                    <button type="button" class="btn btn-secondary"
+                            (click)="postAddNewExpensesDetails(expensesNames, namesIndex)">
+                    <i class="tim-icons icon-simple-add"> </i>
+                  </button></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </ng-container>
+
+              <!-- Add new income point -->
+              <tr *ngIf="budgetArrayGreaterThenZero">
+                <td><button type="button" class="btn btn-secondary" (click)="postAddNewExpensesBasicNames()">
+                  <i class="tim-icons icon-simple-add"> </i>
+                </button></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Template to add or change name budget -->
+
+<ng-template #budgetNameTemplate let-modal>
+  <div class="modal-body">
+    <input class="form-control" id="inlineFormInputGroup" placeholder="Budget name" type="text"
+      [(ngModel)]="tempBudgetName" name="budgetName" (keyup.enter)="modal.close();" autocomplete="off"
+    />
+    <button *ngIf="!isSaveNewBudget" class="btn btn-light" type="button" (click)="modal.close();">Save</button>
+    <button *ngIf="isSaveNewBudget" class="btn btn-light" type="button" (click)="modal.close();">Add new</button>
+    <button class="btn btn-light" type="button" (click)="modal.dismiss()">Cancel</button>
+  </div>
+</ng-template>
+
+<!-- Template confirm delete budget -->
+<ng-template #confirmDeleteModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Profile deletion</h4>
+    <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p><strong>Are you sure you want to delete <span class="text-primary">"{{tempDeleteInformation[0]}}"</span> profile?</strong></p>
+    <p>All information associated to this {{tempDeleteInformation[1]}} profile will be permanently deleted. <br>
+      <span class="text-danger">This operation can not be undone.</span>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <div>
+      <button type="button" class="btn btn-danger" (click)="modal.close('Ok click')">Ok</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>

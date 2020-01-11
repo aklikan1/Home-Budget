@@ -1,6 +1,7 @@
 package homeBudget.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,9 +25,11 @@ public class Budget {
 
     @OneToMany (mappedBy = "budget")
     @JsonIgnore
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private List<IncomeBasicNames> incomeBasicNames;
     @OneToMany (mappedBy = "budget")
     @JsonIgnore
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private  List<ExpensesBasicNames> expensesBasicNames;
 
     public Budget() { }

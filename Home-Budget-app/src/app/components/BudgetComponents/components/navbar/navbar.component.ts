@@ -180,12 +180,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   open(content) {
     this.modalService.open(content, {windowClass: 'modal-search'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }, (reason) => {
+      this.closeResult = `Dismissed ${NavbarComponent.getDismissReason(reason)}`;
     });
   }
 
-  private getDismissReason(reason: any): string {
+  private static getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {

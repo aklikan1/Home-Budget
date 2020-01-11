@@ -13,10 +13,10 @@ import java.util.List;
 @Repository
 public interface ExpensesDetailsRepository extends JpaRepository<ExpensesDetails, Long>{
 
-    List<ExpensesDetails> getAllByExpensesBasicNamesId (Long id);
+    List<ExpensesDetails> getAllByExpensesBasicNamesIdOrderByIdAsc(Long id);
 
     @Query(value = "SELECT SUM(expenses_details.money) as money FROM home_budget.expenses_details expenses_details " +
-            "WHERE CAST(expenses_details.date AS Date) < :date AND expenses_details.expenses_name_id in (:nameId)",
+            "WHERE CAST(expenses_details.date AS Date) <= :date AND expenses_details.expenses_name_id in (:nameId)",
             nativeQuery = true)
     Long getSumMoneyByDateAndExpensesNameId (@Param("date") String date, @Param("nameId") List<Long> id);
 

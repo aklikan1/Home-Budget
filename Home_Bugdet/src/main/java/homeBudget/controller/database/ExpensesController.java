@@ -30,7 +30,7 @@ public class ExpensesController {
     public ResponseEntity<List<BudgetBaseNameAndDetailsMoney>> getBudgetBaseNameAndDetailsMoneyByBudgetId (@PathVariable Long id) {
         List<BudgetBaseNameAndDetailsMoney> nameAndMoney = new ArrayList<>();
 
-        List<ExpensesBasicNames> basicNames = namesRepository.getAllByBudgetId(id);
+        List<ExpensesBasicNames> basicNames = namesRepository.getAllByBudgetIdOrderByIdAsc(id);
         basicNames.forEach(e -> {
             BudgetBaseNameAndDetailsMoney tempNamesMoney = new BudgetBaseNameAndDetailsMoney();
             tempNamesMoney.setName(e.getName());

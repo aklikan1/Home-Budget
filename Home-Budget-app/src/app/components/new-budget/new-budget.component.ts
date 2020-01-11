@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ApiService, User} from "../shared/api.service";
+import {GetApiService, UserGetApi} from "../shared/get-api.service";
 
 @Component({
   selector: 'app-new-budget',
@@ -11,9 +11,9 @@ export class NewBudgetComponent implements OnInit {
     name:'',
     user:[]
   };
-  user: User[] = [];
+  user: UserGetApi[] = [];
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: GetApiService) {
 
   }
 

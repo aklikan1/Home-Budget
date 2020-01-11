@@ -116,7 +116,6 @@ public class ExpensesDetails {
 				", date=" + date +
 				", descriptions='" + descriptions + '\'' +
 				", money=" + money +
-				", expensesBasicNames=" + expensesBasicNames +
 				'}';
 	}
 }

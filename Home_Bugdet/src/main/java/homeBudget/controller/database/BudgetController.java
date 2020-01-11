@@ -37,7 +37,7 @@ public class BudgetController {
 
     @GetMapping(path = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Budget>> getAllBudgetsByUserId (@PathVariable Long id) {
-        List<Budget> budgets = budgetRepository.getAllByUserId(id);
+        List<Budget> budgets = budgetRepository.getAllByUserIdOrderByIdAsc(id);
         return ResponseEntity.ok(budgets);
     }
 
@@ -50,6 +50,13 @@ public class BudgetController {
                 .buildAndExpand(save.getId())
                 .toUri();
         return ResponseEntity.created(location).body(save);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?>deleteBudgetById (@PathVariable Long id) {
+        budgetRepository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 }

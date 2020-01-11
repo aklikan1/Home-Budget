@@ -31,7 +31,7 @@ public class IncomeController {
     public ResponseEntity<List<BudgetBaseNameAndDetailsMoney>> getBudgetBaseNameAndDetailsMoneyByBudgetId (@PathVariable Long id) {
         List<BudgetBaseNameAndDetailsMoney> nameAndMoney = new ArrayList<>();
 
-        List<IncomeBasicNames> basicNames = namesRepository.getAllByBudgetId(id);
+        List<IncomeBasicNames> basicNames = namesRepository.getAllByBudgetIdOrderById(id);
         basicNames.forEach(e -> {
             BudgetBaseNameAndDetailsMoney tempNamesMoney = new BudgetBaseNameAndDetailsMoney();
             tempNamesMoney.setName(e.getName());

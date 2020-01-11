@@ -10,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.security.Principal;
+import java.util.Optional;
 
 //import homeBudget.service.UserService;
 
@@ -27,13 +28,18 @@ public class UserController {
 		//this.userService = userService;
 	}
 
-	/*
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<User> getUserByIdCtrl (@PathVariable Long id) {
-		User user = userRepository.findById(id).get();
-		return ResponseEntity.ok(user);
+		User user;
+		Optional<User> userOptional = userRepository.findById(id);
+		if (userOptional.isPresent()) {
+			user = userOptional.get();
+			return ResponseEntity.ok(user);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+
 	}
-	 */
 
 	@PostMapping(path = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> saveUser (@RequestBody User user) {

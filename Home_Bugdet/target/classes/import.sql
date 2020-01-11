@@ -19,7 +19,8 @@ INSERT INTO `home_budget`.`expenses_details` (`date`, `descriptions`, `money`, `
 INSERT INTO `home_budget`.`expenses_details` (`date`, `descriptions`, `money`, `name`, `expenses_name_id`) VALUES ('2019-11-28', 'Expenses Details Descriptions 3.2', '302', 'Expenses Details Name 3.2', '3');
 INSERT INTO `home_budget`.`income_basic_names` (`estimated_money`, `name`, `budget_id`) VALUES ('1000', 'Income Budget Name 1', '1');
 INSERT INTO `home_budget`.`income_basic_names` (`estimated_money`, `name`, `budget_id`) VALUES ('2000', 'Income Budget Name 2', '1');
-INSERT INTO `home_budget`.`income_basic_names` (`estimated_money`, `name`, `budget_id`) VALUES ('3000', 'Income Budget Name 3', '2');
+INSERT INTO `home_budget`.`income_basic_names` (`estimated_money`, `name`, `budget_id`) VALUES ('3000', 'Income Budget Name 3', '1');
+INSERT INTO `home_budget`.`income_basic_names` (`estimated_money`, `name`, `budget_id`) VALUES ('4000', 'Income Budget Name 4', '2');
 INSERT INTO `home_budget`.`income_details` (`date`, `descriptions`, `money`, `name`, `income_name_id`) VALUES ('2019-12-08', 'Income Details Descriptions 1.1', '110', 'Income Details Name 1.1', '1');
 INSERT INTO `home_budget`.`income_details` (`date`, `descriptions`, `money`, `name`, `income_name_id`) VALUES ('2019-12-07', 'Income Details Descriptions 1.2', '120', 'Income Details Name 1.2', '1');
 INSERT INTO `home_budget`.`income_details` (`date`, `descriptions`, `money`, `name`, `income_name_id`) VALUES ('2019-12-06', 'Income Details Descriptions 1.3', '130', 'Income Details Name 1.3', '1');
