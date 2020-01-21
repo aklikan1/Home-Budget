@@ -1,23 +1,16 @@
 <div class=" content">
   <div class="container">
-    <div class="col-sm-6" style="height:130px;">
-      <div class="form-group">
-        <div class='input-group date' id='datetimepicker10'>
-          <input type='text' class="form-control" />
-          <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar">
-                    </span>
-                </span>
-        </div>
-      </div>
-    </div>
-    <script type="text/javascript">
-      $(function () {
-        $('#datetimepicker10').datetimepicker({
-          viewMode: 'years',
-          format: 'MM/YYYY'
-        });
-      });
-    </script>
+    <mat-form-field>
+      <input matInput [matDatepicker]="dp" placeholder="Month and Year" [formControl]="date">
+      <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+      <mat-datepicker #dp
+                      startView="multi-year"
+                      (yearSelected)="chosenYearHandler($event)"
+                      (monthSelected)="chosenMonthHandler($event, dp)"
+                      (opened)="showDate()"
+                      panelClass="example-month-picker">
+      </mat-datepicker>
+    </mat-form-field>
+
   </div>
 </div>

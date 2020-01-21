@@ -2,7 +2,6 @@
 
   <div class="row" >
     <div class="col-12">
-      <input name="startDate" id="startDate" class="date-picker" (click)="test()"/>
       <div class="btn-group" ngbDropdown>
         <button ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{budgetName}}</button>
@@ -20,11 +19,13 @@
       </div>
       <div class="float-right" data-toggle="buttons">
         <!-- Edit budget name -->
-        <button type="button" class="btn btn-secondary" (click)="changeBudgetName(budgetNameTemplate, actualBudget)">
+        <button type="button" class="btn btn-secondary" (click)="changeBudgetName(budgetNameTemplate, actualBudget)"
+                placement="left" ngbTooltip="Change budget name">
           <i class=" tim-icons icon-pencil"> </i>
         </button>
         <!-- Add new budget -->
-        <button type="button" class="btn btn-secondary" (click)="addNewBudget(budgetNameTemplate)">
+        <button type="button" class="btn btn-secondary" (click)="addNewBudget(budgetNameTemplate)"
+                placement="left" ngbTooltip="Add new budget">
           <i class=" tim-icons icon-simple-add"> </i>
         </button>
       </div>
@@ -39,97 +40,108 @@
         <div class="card-header">
           <h3 class="card-title text-center">Incomes table</h3>
           <div class="text-center">
-            <div class="btn-group" ngbDropdown placement="bottom-right">
-              <button ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle"
-                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Months</button>
-              <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
-                <button type="month" class="text-center" ngbDropdownItem>All Months</button>
-                <div class="dropdown-divider"></div>
-                <button type="month" class="text-center" ngbDropdownItem>January 2020</button>
-                <button type="button" class="text-center" ngbDropdownItem>December 2019</button>
-                <button type="button" class="text-center" ngbDropdownItem>November 2019</button>
-              </div>
-            </div>
+            <mat-form-field>
+              <input matInput [matDatepicker]="incomeDP" placeholder="Month and Year" [formControl]="incomeDateCtrl"
+                     id="incomeMonthAndYearInput">
+              <mat-datepicker-toggle matPrefix [for]="incomeDP"
+                                     placement="bottom" ngbTooltip="Show calendar"></mat-datepicker-toggle>
+              <mat-icon matDatepickerToggleIcon matSuffix (click)="showAllDetails($event, INCOME_CATEGORY)"
+                        placement="bottom" ngbTooltip="Show all details">A</mat-icon>
+              <mat-datepicker #incomeDP touchUi
+                              startView="multi-year"
+                              (yearSelected)="chosenYearHandler($event, INCOME_CATEGORY)"
+                              (monthSelected)="chosenMonthHandler($event, incomeDP, INCOME_CATEGORY)"
+                              panelClass="example-month-picker">
+              </mat-datepicker>
+            </mat-form-field>
           </div>
-
         </div>
-        <div class="">
-          <div class="card-body">
-            <table class="table">
-              <thead class="text-primary">
-              <tr>
-                <th style="width: 40%;">Name</th>
-                <th style="width: 10%;"></th>
-                <th class="text-center" style="width: 20%;">Estimate money / date</th>
-                <th class="text-center" style="width: 25%;">Actual money</th>
+        <div class="card-body">
+          <table class="table">
+            <thead class="text-primary">
+            <tr>
+              <th style="width: 40%;">Name
+                <i class="material-icons" placement="right"
+                   ngbTooltip="One-click to open category, double click to change it name">help_outline</i>
+              </th>
+              <th style="width: 10%;"></th>
+              <th class="text-center" style="width: 20%;">Estimate money / date</th>
+              <th class="text-center" style="width: 25%;">Actual money</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let incomeName of incomeBasicNames; index as namesIndex">
+              <tr class="tableTrElement">
+                <td>
+                  <input [readOnly]="incomeName.readOnly" (click)="showOrHideDetailsClick(incomeName)"
+                         (dblclick)="changeReadOnlyWhenDoubleClick(incomeName)" [(ngModel)]="incomeName.name"
+                         (change)="postUpdateIncomeBasicNames(incomeName)"
+                         type="text" class="input-label" id="{{incomeName.id}}-{{incomeName.name}}"
+                         placeholder="Add category...">
+                </td>
+                <td>
+                  <button type="button" aria-label="Close" class="close text-danger" data-dismiss="modal"
+                          (click)="deleteBasicNames(confirmDeleteModal, incomeName, namesIndex, INCOME_CATEGORY)">
+                    <i class=" tim-icons icon-simple-remove"> </i>
+                  </button>
+                </td>
+                <td class="text-center">
+                  <input type="text" class="input-label text-center"
+                         [(ngModel)]="incomeName.estimated_money" (change)="postUpdateIncomeBasicNames(incomeName)">
+                </td>
+                <td class="text-center">{{incomeActualMoney[namesIndex]}}</td>
+                <td>
+                  <i *ngIf="!incomeName.isClicked" class=" tim-icons icon-minimal-up"> </i>
+                  <i *ngIf="incomeName.isClicked" class=" tim-icons icon-minimal-down"> </i>
+                </td>
               </tr>
-              </thead>
-              <tbody>
-              <ng-container *ngFor="let incomeName of incomeBasicNames; index as namesIndex">
-                <tr class="tableTrElement">
+              <ng-container *ngIf="incomeName.isClicked">
+                <tr *ngFor="let detail of incomeDetailsCheckDate[namesIndex]">
                   <td>
-                    <input [readOnly]="incomeName.readOnly" (click)="showOrHideDetails(incomeName)"
-                           (dblclick)="changeReadOnlyWhenDoubleClick(incomeName)" [(ngModel)]="incomeName.name"
-                           (change)="postUpdateIncomeBasicNames(incomeName)"
-                           type="text" class="input-label" id="{{incomeName.id}}-{{incomeName.name}}"
-                           placeholder="Add category...">
+                    <input type="text" class="input-label"
+                           [(ngModel)]="detail.name" (change)="postUpdateIncomeDetails(detail)"
+                           placeholder="Add detail...">
                   </td>
                   <td>
                     <button type="button" aria-label="Close" class="close text-danger" data-dismiss="modal"
-                            (click)="deleteBasicNames(confirmDeleteModal, incomeName, namesIndex, INCOME_CATEGORY)">
+                            (click)="deleteDetail(confirmDeleteModal, detail, namesIndex, INCOME_DETAIL)">
                       <i class=" tim-icons icon-simple-remove"> </i>
                     </button>
                   </td>
-                  <td class="text-center">
+                  <td class="text-center">{{addDate(detail.date)}}</td>
+                  <td>
                     <input type="text" class="input-label text-center"
-                           [(ngModel)]="incomeName.estimated_money" (change)="postUpdateIncomeBasicNames(incomeName)">
+                           [(ngModel)]="detail.money" (change)="postUpdateIncomeDetails(detail)">
                   </td>
-                  <td class="text-center">{{incomeActualMoney[namesIndex]}}</td>
                 </tr>
-                <ng-container *ngIf="incomeName.isClicked">
-                  <tr *ngFor="let detail of incomeDetails[namesIndex]">
-                    <td>
-                      <input type="text" class="input-label"
-                             [(ngModel)]="detail.name" (change)="postUpdateIncomeDetails(detail)"
-                             placeholder="Add detail...">
-                    </td>
-                    <td>
-                      <button type="button" aria-label="Close" class="close text-danger" data-dismiss="modal"
-                              (click)="deleteDetail(confirmDeleteModal, detail, namesIndex, INCOME_DETAIL)">
-                        <i class=" tim-icons icon-simple-remove"> </i>
-                      </button>
-                    </td>
-                    <td class="text-center">{{addDate(detail.date)}}</td>
-                    <td>
-                      <input type="text" class="input-label text-center"
-                             [(ngModel)]="detail.money" (change)="postUpdateIncomeDetails(detail)">
-                    </td>
-                  </tr>
-                </ng-container>
-                <tr *ngIf="incomeName.isClicked">
-                  <td style="padding-left: 5%">
-                    <button type="button" class="btn btn-secondary"
-                            (click)="postAddNewIncomeDetails(incomeName, namesIndex)">
+
+              <tr *ngIf="isIncomeMonthAndYearIsActual">
+                <td style="padding-left: 5%">
+                  <button type="button" class="btn btn-secondary"
+                          (click)="postAddNewIncomeDetails(incomeName, namesIndex)"
+                          placement="right" ngbTooltip="Add new detail">
                     <i class="tim-icons icon-simple-add"> </i>
                   </button></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </ng-container>
-
-              <!-- Add new income point -->
-              <tr *ngIf="budgetArrayGreaterThenZero">
-                <td><button type="button" class="btn btn-secondary" (click)="postAddNewIncomeBasicNames()">
-                  <i class="tim-icons icon-simple-add"> </i>
-                </button></td>
                 <td></td>
                 <td></td>
                 <td></td>
               </tr>
-              </tbody>
-            </table>
-          </div>
+              </ng-container>
+            </ng-container>
+
+            <!-- Add new income point -->
+            <tr *ngIf="budgetArrayGreaterThenZero">
+              <td><button type="button" class="btn btn-secondary" (click)="postAddNewIncomeBasicNames()"
+                          placement="right" ngbTooltip="Add new category">
+                <i class="tim-icons icon-simple-add"> </i>
+              </button></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -139,42 +151,65 @@
       <div class=" card">
         <div class=" card-header">
           <h3 class="card-title text-center">Expenses table</h3>
+          <div class="text-center">
+            <mat-form-field>
+              <input matInput [matDatepicker]="expensesDP" placeholder="Month and Year" [formControl]="expensesDateCtrl"
+                     id="expensesMonthAndYearInput">
+              <mat-datepicker-toggle matPrefix [for]="expensesDP"
+                                     placement="bottom" ngbTooltip="Show calendar"></mat-datepicker-toggle>
+              <mat-icon matDatepickerToggleIcon matSuffix (click)="showAllDetails($event, EXPENSES_CATEGORY)"
+                        placement="bottom" ngbTooltip="Show all details">A</mat-icon>
+              <mat-datepicker #expensesDP touchUi
+                              startView="multi-year"
+                              (yearSelected)="chosenYearHandler($event, EXPENSES_CATEGORY)"
+                              (monthSelected)="chosenMonthHandler($event, expensesDP, EXPENSES_CATEGORY)"
+                              panelClass="example-month-picker">
+              </mat-datepicker>
+            </mat-form-field>
+          </div>
         </div>
         <div class="">
           <div class="card-body">
             <table class="table">
               <thead class="text-primary">
               <tr>
-                <th style="width: 40%;">Name</th>
+                <th style="width: 40%;">Name
+                  <i class="material-icons" placement="right"
+                     ngbTooltip="One-click to open category, double click to change it name">help_outline</i>
+                </th>
                 <th style="width: 10%;"></th>
                 <th class="text-center" style="width: 20%;">Estimate money / date</th>
                 <th class="text-center" style="width: 25%;">Actual money</th>
               </tr>
               </thead>
               <tbody>
-              <ng-container *ngFor="let expensesNames of expensesBasicNames; index as namesIndex">
+              <ng-container *ngFor="let expensesName of expensesBasicNames; index as namesIndex">
                 <tr class="tableTrElement">
                   <td>
-                    <input [readOnly]="expensesNames.readOnly" (click)="showOrHideDetails(expensesNames)"
-                           (dblclick)="changeReadOnlyWhenDoubleClick(expensesNames)" [(ngModel)]="expensesNames.name"
-                           (change)="postUpdateExpensesBasicNames(expensesNames)"
-                           type="text" class="input-label" id="{{expensesNames.id}}-{{expensesNames.name}}"
+                    <input [readOnly]="expensesName.readOnly" (click)="showOrHideDetailsClick(expensesName)"
+                           (dblclick)="changeReadOnlyWhenDoubleClick(expensesName)" [(ngModel)]="expensesName.name"
+                           (change)="postUpdateExpensesBasicNames(expensesName)"
+                           type="text" class="input-label" id="{{expensesName.id}}-{{expensesName.name}}"
                            placeholder="Add category...">
                   </td>
                   <td>
                     <button type="button" aria-label="Close" class="close text-danger" data-dismiss="modal"
-                            (click)="deleteBasicNames(confirmDeleteModal, expensesNames, namesIndex, EXPENSES_CATEGORY)">
+                            (click)="deleteBasicNames(confirmDeleteModal, expensesName, namesIndex, EXPENSES_CATEGORY)">
                       <i class=" tim-icons icon-simple-remove"> </i>
                     </button>
                   </td>
                   <td class="text-center">
                     <input type="text" class="input-label text-center"
-                           [(ngModel)]="expensesNames.estimated_money" (change)="postUpdateExpensesBasicNames(expensesNames)">
+                           [(ngModel)]="expensesName.estimated_money" (change)="postUpdateExpensesBasicNames(expensesName)">
                   </td>
                   <td class="text-center">{{expensesActualMoney[namesIndex]}}</td>
+                  <td>
+                    <i *ngIf="!expensesName.isClicked" class=" tim-icons icon-minimal-up"> </i>
+                    <i *ngIf="expensesName.isClicked" class=" tim-icons icon-minimal-down"> </i>
+                  </td>
                 </tr>
-                <ng-container *ngIf="expensesNames.isClicked">
-                  <tr *ngFor="let detail of expensesDetails[namesIndex]">
+                <ng-container *ngIf="expensesName.isClicked">
+                  <tr *ngFor="let detail of expensesDetailsCheckDate[namesIndex]">
                     <td>
                       <input type="text" class="input-label"
                              [(ngModel)]="detail.name" (change)="postUpdateExpensesDetails(detail)"
@@ -192,22 +227,26 @@
                              [(ngModel)]="detail.money" (change)="postUpdateExpensesDetails(detail)">
                     </td>
                   </tr>
-                </ng-container>
-                <tr *ngIf="expensesNames.isClicked">
+
+                <tr *ngIf="isExpensesMonthAndYearIsActual">
                   <td style="padding-left: 5%">
                     <button type="button" class="btn btn-secondary"
-                            (click)="postAddNewExpensesDetails(expensesNames, namesIndex)">
+                            (click)="postAddNewExpensesDetails(expensesName, namesIndex)"
+                            placement="right" ngbTooltip="Add new detail">
                     <i class="tim-icons icon-simple-add"> </i>
                   </button></td>
                   <td></td>
                   <td></td>
                   <td></td>
                 </tr>
+
+                </ng-container>
               </ng-container>
 
               <!-- Add new income point -->
               <tr *ngIf="budgetArrayGreaterThenZero">
-                <td><button type="button" class="btn btn-secondary" (click)="postAddNewExpensesBasicNames()">
+                <td><button type="button" class="btn btn-secondary" (click)="postAddNewExpensesBasicNames()"
+                            placement="right" ngbTooltip="Add new category">
                   <i class="tim-icons icon-simple-add"> </i>
                 </button></td>
                 <td></td>

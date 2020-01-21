@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
   selector: "app-notifications",
   templateUrl: "notifications.component.html"
 })
-export class NotificationsComponent implements OnInit {
+export class NotificationsComponent {
   //Const notification category
   public NOTIFICATION_INFO = 'INFO';
   public NOTIFICATION_SUCCESS = 'SUCCESS';
@@ -47,7 +47,7 @@ export class NotificationsComponent implements OnInit {
 
     switch(category){
       case this.NOTIFICATION_INFO:
-        this.toastr.info('<span class="tim-icons icon-bell-55" [data-notify]="icon"></span>'+message, '', {
+        this.toastr.info('<span class="tim-icons icon-bell-55"></span>'+message, '', {
           timeOut: 2000,
           closeButton: true,
           enableHtml: true,
@@ -56,7 +56,7 @@ export class NotificationsComponent implements OnInit {
         });
         break;
       case this.NOTIFICATION_SUCCESS:
-        this.toastr.success('<span class="tim-icons icon-bell-55" [data-notify]="icon"></span>'+message, '', {
+        this.toastr.success('<span class="tim-icons icon-bell-55"></span>'+message, '', {
           timeOut: 2000,
           closeButton: true,
           enableHtml: true,
@@ -65,7 +65,7 @@ export class NotificationsComponent implements OnInit {
         });
         break;
       case this.NOTIFICATION_WARNING:
-        this.toastr.warning('<span class="tim-icons icon-bell-55" [data-notify]="icon"></span>'+message, '', {
+        this.toastr.warning('<span class="tim-icons icon-bell-55"></span>'+message, '', {
           timeOut: 2000,
           closeButton: true,
           enableHtml: true,
@@ -74,7 +74,7 @@ export class NotificationsComponent implements OnInit {
         });
         break;
       case this.NOTIFICATION_ERROR:
-        this.toastr.error('<span class="tim-icons icon-bell-55" [data-notify]="icon"></span>'+message, '', {
+        this.toastr.error('<span class="tim-icons icon-bell-55"></span>'+message, '', {
           timeOut: 2000,
           enableHtml: true,
           closeButton: true,
@@ -83,7 +83,7 @@ export class NotificationsComponent implements OnInit {
         });
         break;
       case this.NOTIFICATION_SHOW:
-        this.toastr.show('<span class="tim-icons icon-bell-55" [data-notify]="icon"></span>'+message, '', {
+        this.toastr.show('<span class="tim-icons icon-bell-55"></span>'+message, '', {
           timeOut: 2000,
           closeButton: true,
           enableHtml: true,
@@ -95,6 +95,4 @@ export class NotificationsComponent implements OnInit {
         break;
     }
   }
-
-  ngOnInit() {}
 }

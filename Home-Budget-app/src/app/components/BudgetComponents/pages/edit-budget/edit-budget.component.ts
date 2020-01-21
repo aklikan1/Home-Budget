@@ -1,5 +1,10 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, OnInit, PipeTransform, TemplateRef} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {MatDatepicker} from '@angular/material/datepicker';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import * as _moment from 'moment';
+import {default as _rollupMoment, Moment} from 'moment';
 import {Observable} from 'rxjs';
 import {DeleteApiService} from '../../../shared/delete-api.service';
 import {GetApiService} from '../../../shared/get-api.service';
@@ -11,7 +16,8 @@ import {GetBudgetBasicNames} from '../dashboard/model/getBudgetBasicNames';
 import {PostBudgetBasicNames} from '../dashboard/model/postBudgetBasicNames';
 import {User} from '../dashboard/model/user';
 import {NotificationsComponent} from '../notifications/notifications.component';
-import * as $ from 'jquery'
+
+const moment = _rollupMoment || _moment;
 
 @Component({
   selector: 'app-edit-budget',
@@ -48,12 +54,20 @@ export class EditBudgetComponent implements OnInit {
 
   //Income details
   private incomeDetails: BudgetDetails[][];
+  private incomeDetailsCheckDate: BudgetDetails[][] = [];
 
   //Expensive details
   private expensesDetails: BudgetDetails[][];
+  private expensesDetailsCheckDate: BudgetDetails[][] = [];
 
   private isSaveNewBudget: boolean;
   private tempDeleteInformation: string[] = [];
+
+  //Date
+  incomeDateCtrl: FormControl = new FormControl(moment());
+  isIncomeMonthAndYearIsActual: boolean;
+  expensesDateCtrl: FormControl = new FormControl(moment());
+  isExpensesMonthAndYearIsActual: boolean;
 
   constructor(private modalService: NgbModal, private postApiService: PostApiService,
               private getApiService: GetApiService, private deleteApiService: DeleteApiService,
@@ -62,10 +76,6 @@ export class EditBudgetComponent implements OnInit {
   ngOnInit() {
     this.getUserByUserId();
     this.getAllBudgetsInfoByUserId();
-  }
-
-  test() {
-
   }
 
   getUserByUserId () {
@@ -109,7 +119,6 @@ export class EditBudgetComponent implements OnInit {
             names.isClicked = false;
           }
         );
-
       },
       error => {
         alert("An error is occurred in getAllIncomeBasicNamesByBudgetId()");
@@ -123,16 +132,10 @@ export class EditBudgetComponent implements OnInit {
     getDetails.subscribe(
       value => {
         this.incomeDetails = value;
-        this.incomeDetails.forEach(
-          value1 => {
-            let tempMoney = 0;
-            value1.forEach(
-              value2 => {
-                tempMoney = tempMoney+value2.money;
-              });
-            this.incomeActualMoney.push(tempMoney);
-          }
-        );
+        this.isIncomeMonthAndYearIsActual =
+          this.checkAndChangeDateIsActualMonthAndYear(this.incomeDetails, this.incomeDetailsCheckDate, this.incomeDateCtrl.value);
+        this.reloadEstimatedMoneyInBasicNames(this.incomeActualMoney, this.incomeDetailsCheckDate);
+
       },
       error => {
         alert("An error is occurred in getAllIncomeDetailsByBasicNamesId()");
@@ -164,17 +167,11 @@ export class EditBudgetComponent implements OnInit {
     this.getApiService.getAllExpensesDetailsByBudgetId(id).subscribe(
       value => {
         this.expensesDetails = value;
-        this.expensesDetails.forEach(
-          value1 => {
-            let tempMoney = 0;
-            value1.forEach(
-              value2 => {
-                tempMoney = +value2.money+tempMoney;
-              });
-            this.expensesActualMoney.push(tempMoney);
-          }
-        );
-      },
+        this.isExpensesMonthAndYearIsActual =
+          this.checkAndChangeDateIsActualMonthAndYear(this.expensesDetails, this.expensesDetailsCheckDate, this.expensesDateCtrl.value);
+        this.reloadEstimatedMoneyInBasicNames(this.expensesActualMoney, this.expensesDetailsCheckDate);
+
+        },
       error => {
         alert("An error is occurred in getAllExpensiveDetailsByBudgetId()");
         console.log(error);
@@ -261,6 +258,7 @@ export class EditBudgetComponent implements OnInit {
     this.postApiService.postIncomeBudgetDetails(tempBudgetDetail).subscribe(
       value => {
         this.incomeDetails[actualBasicNameIndex].push(value);
+        this.incomeDetailsCheckDate[actualBasicNameIndex].push(value);
       }
     );
 
@@ -275,6 +273,7 @@ export class EditBudgetComponent implements OnInit {
     this.postApiService.postExpensesBudgetDetails(tempBudgetDetail).subscribe(
       value => {
         this.expensesDetails[actualBasicNameIndex].push(value);
+        this.expensesDetailsCheckDate[actualBasicNameIndex].push(value);
       }
     );
 
@@ -306,12 +305,12 @@ export class EditBudgetComponent implements OnInit {
 
    postUpdateIncomeDetails (incomeDetail: BudgetDetails) {
     this.postApiService.postIncomeBudgetDetails(incomeDetail).subscribe();
-    this.reloadEstimatedMoneyInBasicNames(this.incomeActualMoney, this.incomeDetails);
+    this.reloadEstimatedMoneyInBasicNames(this.incomeActualMoney, this.incomeDetailsCheckDate);
    }
 
   postUpdateExpensesDetails(expensesDetail: BudgetDetails) {
     this.postApiService.postExpensesBudgetDetails(expensesDetail).subscribe();
-    this.reloadEstimatedMoneyInBasicNames(this.expensesActualMoney, this.expensesDetails);
+    this.reloadEstimatedMoneyInBasicNames(this.expensesActualMoney, this.expensesDetailsCheckDate);
   }
 
   reloadEstimatedMoneyInBasicNames (actualMoney: number[], details: BudgetDetails[][]) {
@@ -475,11 +474,15 @@ export class EditBudgetComponent implements OnInit {
           case this.INCOME_DETAIL: {
             this.deleteApiService.deleteIncomeDetailById(id).subscribe();
             forEachDetailDelete(this.incomeDetails, basicNameIndex, id);
+            forEachDetailDelete(this.incomeDetailsCheckDate, basicNameIndex, id);
+            this.reloadEstimatedMoneyInBasicNames(this.incomeActualMoney, this.incomeDetailsCheckDate);
             break;
           }
           case this.EXPENSES_DETAIL: {
             this.deleteApiService.deleteExpensesDetailById(id).subscribe();
             forEachDetailDelete(this.expensesDetails, basicNameIndex, id);
+            forEachDetailDelete(this.expensesDetailsCheckDate, basicNameIndex, id);
+            this.reloadEstimatedMoneyInBasicNames(this.expensesActualMoney, this.expensesDetailsCheckDate);
             break;
           }
         }
@@ -510,7 +513,7 @@ export class EditBudgetComponent implements OnInit {
     this.notification.showNotification(form, align, category, message);
   }
 
-  showOrHideDetails(basicName: GetBudgetBasicNames) {
+  showOrHideDetailsClick(basicName: GetBudgetBasicNames) {
     basicName.readOnly = true;
     setTimeout(
       () => {
@@ -534,4 +537,105 @@ export class EditBudgetComponent implements OnInit {
     let year: string = tempDate.getFullYear().toString();
     return (tempDate.getDate()+"."+(tempDate.getMonth()+1)+"."+year.substr(year.length-2)).toString();
   }
+
+  chosenYearHandler(normalizedYear: Moment, category: string) {
+    switch (category) {
+      case this.INCOME_CATEGORY: {
+        changeDateYearMoment(this.incomeDateCtrl);
+        this.isIncomeMonthAndYearIsActual =
+          this.checkAndChangeDateIsActualMonthAndYear(this.incomeDetails, this.incomeDetailsCheckDate, this.incomeDateCtrl.value);
+        this.reloadEstimatedMoneyInBasicNames(this.incomeActualMoney, this.incomeDetailsCheckDate);
+        break;
+      }
+      case this.EXPENSES_CATEGORY: {
+        changeDateYearMoment(this.expensesDateCtrl);
+        this.isExpensesMonthAndYearIsActual =
+          this.checkAndChangeDateIsActualMonthAndYear(this.expensesDetails, this.expensesDetailsCheckDate, this.expensesDateCtrl.value);
+        this.reloadEstimatedMoneyInBasicNames(this.expensesActualMoney, this.expensesDetailsCheckDate);
+        break;
+      }
+    }
+
+    function changeDateYearMoment(formControlDate: FormControl) {
+      let ctrlValue: Moment = formControlDate.value;
+      ctrlValue.year(normalizedYear.year());
+      formControlDate.setValue(ctrlValue);
+    }
+
+  }
+
+  chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<any>, category: string) {
+
+    switch (category) {
+      case this.INCOME_CATEGORY: {
+        changeDateMonthMoment(this.incomeDateCtrl);
+        this.isIncomeMonthAndYearIsActual =
+          this.checkAndChangeDateIsActualMonthAndYear(this.incomeDetails, this.incomeDetailsCheckDate, this.incomeDateCtrl.value);
+        this.reloadEstimatedMoneyInBasicNames(this.incomeActualMoney, this.incomeDetailsCheckDate);
+        break;
+      }
+      case this.EXPENSES_CATEGORY: {
+        changeDateMonthMoment(this.expensesDateCtrl);
+        this.isExpensesMonthAndYearIsActual =
+          this.checkAndChangeDateIsActualMonthAndYear(this.expensesDetails, this.expensesDetailsCheckDate, this.expensesDateCtrl.value);
+        this.reloadEstimatedMoneyInBasicNames(this.expensesActualMoney, this.expensesDetailsCheckDate);
+        break;
+      }
+    }
+
+    datepicker.close();
+
+    function changeDateMonthMoment (formControlDate: FormControl) {
+      let ctrlValue: Moment = formControlDate.value;
+      ctrlValue.month(normalizedMonth.month());
+      ctrlValue.year(normalizedMonth.year());
+      formControlDate.setValue(ctrlValue);
+    }
+  }
+
+  checkAndChangeDateIsActualMonthAndYear(allDetails: BudgetDetails[][], showedDetail: BudgetDetails[][],
+                                         actualDateMoment: Moment) : boolean {
+    showedDetail.length = 0;
+    let tempActualDate = new Date();
+    let tempMomentMonth = actualDateMoment.month();
+    let tempMomentYear = actualDateMoment.year();
+
+    allDetails.map(
+      detailsNames => {
+        let tempDetailName: BudgetDetails[] = [];
+        detailsNames.map(
+          details => {
+            let tempDetailDate = new Date(details.date);
+            let tempDetailMonth = tempDetailDate.getMonth();
+            let tempDetailYear = tempDetailDate.getFullYear();
+            if (tempMomentMonth === tempDetailMonth && tempMomentYear === tempDetailYear) {
+              tempDetailName.push(details);
+            }
+        });
+        showedDetail.push(tempDetailName);
+      }
+    );
+
+    return tempActualDate.getMonth() === tempMomentMonth && tempActualDate.getFullYear() === tempMomentYear;
+
+  }
+
+  showAllDetails(event: any, category: string) {
+    event.stopPropagation();
+    switch (category) {
+      case this.INCOME_CATEGORY: {
+        this.incomeDetailsCheckDate = [...this.incomeDetails];
+        this.reloadEstimatedMoneyInBasicNames(this.incomeActualMoney, this.incomeDetailsCheckDate);
+        this.isIncomeMonthAndYearIsActual = false;
+        break;
+      }
+      case this.EXPENSES_CATEGORY: {
+        this.expensesDetailsCheckDate = [...this.expensesDetails];
+        this.reloadEstimatedMoneyInBasicNames(this.expensesActualMoney, this.expensesDetailsCheckDate);
+        this.isExpensesMonthAndYearIsActual = false;
+        break;
+      }
+    }
+  }
+
 }

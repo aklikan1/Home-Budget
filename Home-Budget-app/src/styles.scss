@@ -9,3 +9,6 @@
 @import "assets/scss/black-dashboard.scss";
 @import "assets/css/nucleo-icons.css";
 @import url(~ngx-toastr/toastr.css);
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
