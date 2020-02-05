@@ -1,8 +1,6 @@
 package homeBudget.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -12,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -48,9 +45,6 @@ public class User {
     @Column(nullable = false, columnDefinition = "TINYINT(1)", name = "active")
     private boolean active;
 
-    @Column(length = 300)
-    private String descriptions;
-
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Budget> budget;
@@ -61,6 +55,16 @@ public class User {
                 inverseJoinColumns = @JoinColumn(name = "role_id")
                 )
     private Set<Role> roles = new HashSet<>();
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
+    fetch = FetchType.LAZY, optional = false)
+    private UserCustomDetails userCustomDetails;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, optional = false)
+    private UserPhoto userPhoto;
 
     public User() {}
 

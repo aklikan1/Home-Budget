@@ -45,19 +45,19 @@ export class EditBudgetComponent implements OnInit {
   private budgetArrayGreaterThenZero: boolean;
 
   //Income basic names
-  private incomeBasicNames: GetBudgetBasicNames[];
+  private incomeBasicNames: GetBudgetBasicNames[] = [];
   private incomeActualMoney: number[] = [];
 
   //Expenses basic names
-  private expensesBasicNames: GetBudgetBasicNames[];
+  private expensesBasicNames: GetBudgetBasicNames[] = [];
   private expensesActualMoney: number[] = [];
 
   //Income details
-  private incomeDetails: BudgetDetails[][];
+  private incomeDetails: BudgetDetails[][] = [];
   private incomeDetailsCheckDate: BudgetDetails[][] = [];
 
   //Expensive details
-  private expensesDetails: BudgetDetails[][];
+  private expensesDetails: BudgetDetails[][] = [];
   private expensesDetailsCheckDate: BudgetDetails[][] = [];
 
   private isSaveNewBudget: boolean;
@@ -240,7 +240,7 @@ export class EditBudgetComponent implements OnInit {
     details.push(tempBudgetDetails);
 
     //Notification
-    this.notificationWhenAddNewData(nameMessage);
+    this.notificationWhenAddNewDataSuccess(nameMessage);
   }
 
   postUpdateIncomeBasicNames(incomeBasicName: PostBudgetBasicNames) {
@@ -263,7 +263,7 @@ export class EditBudgetComponent implements OnInit {
     );
 
     //Notification
-    this.notificationWhenAddNewData(nameMessage);
+    this.notificationWhenAddNewDataSuccess(nameMessage);
   }
 
   postAddNewExpensesDetails (actualBasicName: GetBudgetBasicNames, actualBasicNameIndex: number) {
@@ -278,7 +278,7 @@ export class EditBudgetComponent implements OnInit {
     );
 
     //Notification
-    this.notificationWhenAddNewData(nameMessage);
+    this.notificationWhenAddNewDataSuccess(nameMessage);
   }
 
   createNewDetailsTemplate (actualBasicName: GetBudgetBasicNames): BudgetDetails {
@@ -295,7 +295,7 @@ export class EditBudgetComponent implements OnInit {
     return tempBudgetDetail;
   }
 
-  private notificationWhenAddNewData(nameMessage: string) {
+  private notificationWhenAddNewDataSuccess(nameMessage: string) {
     let form = this.notification.FORM_TOP;
     let align = this.notification.ALIGN_LEFT;
     let category = this.notification.NOTIFICATION_SUCCESS;
@@ -365,6 +365,8 @@ export class EditBudgetComponent implements OnInit {
             if (this.budgets.length === 0) {
               this.actualBudget = value;
               this.budgetName = this.actualBudget.name;
+              this.isIncomeMonthAndYearIsActual = this.checkAndChangeDateIsActualMonthAndYear(this.incomeDetails, this.incomeDetailsCheckDate, this.incomeDateCtrl.value);
+              this.isExpensesMonthAndYearIsActual = this.checkAndChangeDateIsActualMonthAndYear(this.expensesDetails, this.expensesDetailsCheckDate, this.expensesDateCtrl.value);
             }
             this.budgets.push(value);
           }
@@ -627,14 +629,51 @@ export class EditBudgetComponent implements OnInit {
         this.incomeDetailsCheckDate = [...this.incomeDetails];
         this.reloadEstimatedMoneyInBasicNames(this.incomeActualMoney, this.incomeDetailsCheckDate);
         this.isIncomeMonthAndYearIsActual = false;
+        this.incomeBasicNames.map(
+          names => {
+            names.isClicked = true;
+          }
+        );
         break;
       }
       case this.EXPENSES_CATEGORY: {
         this.expensesDetailsCheckDate = [...this.expensesDetails];
         this.reloadEstimatedMoneyInBasicNames(this.expensesActualMoney, this.expensesDetailsCheckDate);
         this.isExpensesMonthAndYearIsActual = false;
+        this.expensesBasicNames.map(
+          names => {
+            names.isClicked = true;
+          }
+        );
         break;
       }
+    }
+  }
+
+  returnToActualDate(event: Event, category: string) {
+    event.stopPropagation();
+    switch (category) {
+      case this.INCOME_CATEGORY: {
+        setActualDate(this.incomeDateCtrl);
+        this.isIncomeMonthAndYearIsActual =
+          this.checkAndChangeDateIsActualMonthAndYear(this.incomeDetails, this.incomeDetailsCheckDate, this.incomeDateCtrl.value);
+        this.checkAndChangeDateIsActualMonthAndYear(this.incomeDetails, this.incomeDetailsCheckDate, this.incomeDateCtrl.value);
+        break;
+      }
+      case this.EXPENSES_CATEGORY: {
+        setActualDate(this.expensesDateCtrl);
+        this.isExpensesMonthAndYearIsActual =
+          this.checkAndChangeDateIsActualMonthAndYear(this.expensesDetails, this.expensesDetailsCheckDate, this.expensesDateCtrl.value);
+        this.reloadEstimatedMoneyInBasicNames(this.expensesActualMoney, this.expensesDetailsCheckDate);
+      }
+    }
+
+    function setActualDate(formControlDate: FormControl) {
+      let tempActualDate = new Date();
+      let ctrlValue: Moment = formControlDate.value;
+      ctrlValue.month(tempActualDate.getMonth());
+      ctrlValue.year(tempActualDate.getFullYear());
+      formControlDate.setValue(ctrlValue);
     }
   }
 

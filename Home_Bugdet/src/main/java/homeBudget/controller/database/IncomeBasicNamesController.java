@@ -1,16 +1,15 @@
 package homeBudget.controller.database;
 
-import java.net.URI;
-import java.util.List;
-
+import homeBudget.model.IncomeBasicNames;
+import homeBudget.repository.IncomeBasicNamesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import homeBudget.model.IncomeBasicNames;
-import homeBudget.repository.IncomeBasicNamesRepository;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/incomeBasicNames")

@@ -1,16 +1,15 @@
 <div class=" content">
   <div class="container">
-    <mat-form-field>
-      <input matInput [matDatepicker]="dp" placeholder="Month and Year" [formControl]="date">
-      <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-      <mat-datepicker #dp
-                      startView="multi-year"
-                      (yearSelected)="chosenYearHandler($event)"
-                      (monthSelected)="chosenMonthHandler($event, dp)"
-                      (opened)="showDate()"
-                      panelClass="example-month-picker">
-      </mat-datepicker>
-    </mat-form-field>
+    <h3>Image Uploading Module</h3>
+    <div>
+      <input type="file" (change)="onFileChanged($event)">
+
+      <img [src]="imgURL" height="200" *ngIf="imgURL">
+    </div>
+    <input type="button" (click)="onUpload()" value="upload">
+    <hr />
+    Received Image:
+    <img [src]="convertedImage" >
 
   </div>
 </div>

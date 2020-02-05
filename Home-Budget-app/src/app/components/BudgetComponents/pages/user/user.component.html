@@ -3,40 +3,38 @@
   <div class=" row">
     <div class=" col-md-8">
       <div class=" card">
-        <div class=" card-header"><h5 class=" title">Edit Profile</h5></div>
+        <div class=" card-header">
+          <div class="title">
+            <h5>Edit Profile<i class="material-icons" placement="bottom"
+                               ngbTooltip="Click on the photo to change its details">help_outline</i></h5>
+          </div>
+        </div>
         <div class=" card-body">
-          <form>
+          <form name="form" (ngSubmit)="onSubmitUserCustomDetails()" #customDetails='ngForm'>
             <div class=" row">
-              <div class=" col-md-5 pr-md-1">
+              <div class=" col-md-4 pr-md-1">
                 <div class=" form-group">
-                  <label> Company (disabled) </label>
+                  <label for="username"> Username </label>
                   <input
                     class=" form-control"
-                    disabled=""
-                    placeholder="Company"
                     type="text"
-                    value="Creative Code Inc."
-                  />
-                </div>
-              </div>
-              <div class=" col-md-3 px-md-1">
-                <div class=" form-group">
-                  <label> Username </label>
-                  <input
-                    class=" form-control"
+                    id="username"
                     placeholder="Username"
-                    type="text"
-                    value="michael23"
+                    [value]="userCustomDetails?.user?.username"
+                    [disabled]="true"
                   />
                 </div>
               </div>
-              <div class=" col-md-4 pl-md-1">
+              <div class=" col-md-5 pl-md-1">
                 <div class=" form-group">
-                  <label for="exampleInputEmail1"> Email address </label>
+                  <label for="email"> Email address </label>
                   <input
                     class=" form-control"
-                    placeholder="mike@email.com"
                     type="email"
+                    id="email"
+                    placeholder="Email"
+                    [value]="userCustomDetails?.user?.email"
+                    [disabled]="true"
                   />
                 </div>
               </div>
@@ -44,23 +42,27 @@
             <div class=" row">
               <div class=" col-md-6 pr-md-1">
                 <div class=" form-group">
-                  <label> First Name </label>
+                  <label for="firstName"> First Name </label>
                   <input
                     class=" form-control"
-                    placeholder="Company"
                     type="text"
-                    value="Mike"
+                    name="firstName"
+                    id="firstName"
+                    placeholder="First name"
+                    [(ngModel)]="userCustomDetails.firstName"
                   />
                 </div>
               </div>
               <div class=" col-md-6 pl-md-1">
                 <div class=" form-group">
-                  <label> Last Name </label>
+                  <label for="lastName"> Last Name </label>
                   <input
                     class=" form-control"
-                    placeholder="Last Name"
                     type="text"
-                    value="Andrew"
+                    id="lastName"
+                    name="lastName"
+                    placeholder="Last name"
+                    [(ngModel)]="userCustomDetails.lastName"
                   />
                 </div>
               </div>
@@ -68,12 +70,14 @@
             <div class=" row">
               <div class=" col-md-12">
                 <div class=" form-group">
-                  <label> Address </label>
+                  <label for="address"> Address </label>
                   <input
                     class=" form-control"
-                    placeholder="Home Address"
                     type="text"
-                    value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                    id="address"
+                    name="address"
+                    placeholder="Address"
+                    [(ngModel)]="userCustomDetails.address"
                   />
                 </div>
               </div>
@@ -81,33 +85,40 @@
             <div class=" row">
               <div class=" col-md-4 pr-md-1">
                 <div class=" form-group">
-                  <label> City </label>
+                  <label for="city"> City </label>
                   <input
-                    class=" form-control"
-                    placeholder="City"
+                    class="form-control"
                     type="text"
-                    value="Mike"
+                    id="city"
+                    name="city"
+                    placeholder="City"
+                    [(ngModel)]="userCustomDetails.city"
                   />
                 </div>
               </div>
               <div class=" col-md-4 px-md-1">
                 <div class=" form-group">
-                  <label> Country </label>
+                  <label for="country"> Country </label>
                   <input
-                    class=" form-control"
-                    placeholder="Country"
+                    class="form-control"
                     type="text"
-                    value="Andrew"
+                    id="country"
+                    name="country"
+                    placeholder="Country"
+                    [(ngModel)]="userCustomDetails.country"
                   />
                 </div>
               </div>
               <div class=" col-md-4 pl-md-1">
                 <div class=" form-group">
-                  <label> Postal Code </label>
+                  <label for="zipCode"> Postal Code </label>
                   <input
                     class=" form-control"
+                    type="text"
+                    id="zipCode"
+                    name="zipCode"
                     placeholder="ZIP Code"
-                    type="number"
+                    [(ngModel)]="userCustomDetails.zipCode"
                   />
                 </div>
               </div>
@@ -115,27 +126,27 @@
             <div class=" row">
               <div class=" col-md-8">
                 <div class=" form-group">
-                  <label> About Me </label>
+                  <label for="aboutMe"> About Me </label>
                   <textarea
-                    class=" form-control"
+                    class="form-control"
                     cols="80"
-                    placeholder="Here can be your description"
                     rows="4"
-                    value="Mike"
-                  >
-Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.
-</textarea
-                  >
+                    id="aboutMe"
+                    name="aboutMe"
+                    placeholder="Here can be your description"
+                    [(ngModel)]="userCustomDetails.aboutMe"
+                  ></textarea>
                 </div>
               </div>
             </div>
+            <div class=" card-footer">
+              <button class=" btn btn-fill btn-danger">Save</button>
+            </div>
           </form>
-        </div>
-        <div class=" card-footer">
-          <button class=" btn btn-fill btn-danger" type="submit">Save</button>
         </div>
       </div>
     </div>
+
     <div class=" col-md-4">
       <div class=" card card-user">
         <div class=" card-body">
@@ -145,17 +156,15 @@ Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.
             <div class=" block block-two"></div>
             <div class=" block block-three"></div>
             <div class=" block block-four"></div>
-            <a href="javascript:void(0)">
-              <img alt="..." class=" avatar" src="assets/img/emilyz.jpg" />
+            <a href="javascript:void(0)" (click)="modalAllPhotoDetails(allPhotoDetails)">
+              <img alt="..." class=" avatar" [src]="userPhotoImgUrl" />
 
-              <h5 class=" title">Mike Andrew</h5>
+              <h5 class="title">{{firstAndLastName}}</h5>
             </a>
-            <p class=" description">Ceo/Co-Founder</p>
+            <p class=" description">{{job}}</p>
           </div>
-          <div class=" card-description">
-            Do not be scared of the truth because we need to restart the human
-            foundation in truth And I love you like Kanye loves Kanye I love
-            Rick Owens’ bed design but the back is...
+          <div class="card-description text-center">
+            {{photoDescriptions}}
           </div>
         </div>
         <div class=" card-footer">
@@ -184,3 +193,35 @@ Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.
     </div>
   </div>
 </div>
+
+<ng-template #allPhotoDetails let-modal class="">
+  <div class="modal-body modal-test-backgroud">
+    <label for="job">Current job</label>
+    <input class="form-control" id="job" placeholder="Current job" type="text"
+           [(ngModel)]="tempJob" name="job" autocomplete="off"
+    />
+    <label for="photoDescription">Photo description</label>
+    <textarea
+      class="form-control test"
+      cols="80"
+      rows="4"
+      id="photoDescription"
+      name="photoDescription"
+      placeholder="Here can be your photo description"
+      [(ngModel)]="tempPhotoDesc"
+    ></textarea>
+    <label for="userPhoto">User photo</label>
+    <input id="userPhoto" type="file" class="form-control" accept="image/png, image/jpg, image/jpeg" (change)="onFileChanged($event)">
+    <div class="text-center">
+      <img [src]="imgURL" height="200" *ngIf="imgURL" alt="">
+    </div>
+    <div *ngIf="requiredImageFile" class="text-danger">Required only image file!</div>
+      <div class="row">
+        <div class="modal-body">
+          <button class="btn btn-light" type="button" (click)="modal.close()">Save</button>
+          <button class="btn btn-light" type="button" (click)="modal.dismiss()">Cancel</button>
+        </div>
+      </div>
+  </div>
+
+</ng-template>

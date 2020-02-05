@@ -47,6 +47,8 @@
                                      placement="bottom" ngbTooltip="Show calendar"></mat-datepicker-toggle>
               <mat-icon matDatepickerToggleIcon matSuffix (click)="showAllDetails($event, INCOME_CATEGORY)"
                         placement="bottom" ngbTooltip="Show all details">A</mat-icon>
+              <mat-icon matDatepickerToggleIcon matSuffix (click)="returnToActualDate($event, INCOME_CATEGORY)"
+                        placement="bottom" ngbTooltip="Return to actual date">R</mat-icon>
               <mat-datepicker #incomeDP touchUi
                               startView="multi-year"
                               (yearSelected)="chosenYearHandler($event, INCOME_CATEGORY)"
@@ -92,8 +94,10 @@
                 </td>
                 <td class="text-center">{{incomeActualMoney[namesIndex]}}</td>
                 <td>
-                  <i *ngIf="!incomeName.isClicked" class=" tim-icons icon-minimal-up"> </i>
-                  <i *ngIf="incomeName.isClicked" class=" tim-icons icon-minimal-down"> </i>
+                  <i *ngIf="!incomeName.isClicked" class=" tim-icons icon-minimal-up basicNameIcon"
+                     (click)="showOrHideDetailsClick(incomeName)"> </i>
+                  <i *ngIf="incomeName.isClicked" class=" tim-icons icon-minimal-down basicNameIcon"
+                     (click)="showOrHideDetailsClick(incomeName)"> </i>
                 </td>
               </tr>
               <ng-container *ngIf="incomeName.isClicked">
@@ -159,6 +163,8 @@
                                      placement="bottom" ngbTooltip="Show calendar"></mat-datepicker-toggle>
               <mat-icon matDatepickerToggleIcon matSuffix (click)="showAllDetails($event, EXPENSES_CATEGORY)"
                         placement="bottom" ngbTooltip="Show all details">A</mat-icon>
+              <mat-icon matDatepickerToggleIcon matSuffix (click)="returnToActualDate($event, EXPENSES_CATEGORY)"
+                        placement="bottom" ngbTooltip="Return to actual date">R</mat-icon>
               <mat-datepicker #expensesDP touchUi
                               startView="multi-year"
                               (yearSelected)="chosenYearHandler($event, EXPENSES_CATEGORY)"
@@ -204,8 +210,10 @@
                   </td>
                   <td class="text-center">{{expensesActualMoney[namesIndex]}}</td>
                   <td>
-                    <i *ngIf="!expensesName.isClicked" class=" tim-icons icon-minimal-up"> </i>
-                    <i *ngIf="expensesName.isClicked" class=" tim-icons icon-minimal-down"> </i>
+                    <i *ngIf="!expensesName.isClicked" class=" tim-icons icon-minimal-up basicNameIcon"
+                       (click)="showOrHideDetailsClick(expensesName)"> </i>
+                    <i *ngIf="expensesName.isClicked" class=" tim-icons icon-minimal-down basicNameIcon"
+                       (click)="showOrHideDetailsClick(expensesName)"> </i>
                   </td>
                 </tr>
                 <ng-container *ngIf="expensesName.isClicked">

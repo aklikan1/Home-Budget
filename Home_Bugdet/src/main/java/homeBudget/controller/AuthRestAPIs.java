@@ -1,14 +1,13 @@
 package homeBudget.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import homeBudget.message.request.LoginForm;
 import homeBudget.message.request.SignUpForm;
 import homeBudget.message.response.JwtResponse;
 import homeBudget.message.response.ResponseMessage;
-import homeBudget.model.Role;
-import homeBudget.model.RoleName;
-import homeBudget.model.User;
+import homeBudget.model.*;
 import homeBudget.repository.RoleRepository;
+import homeBudget.repository.UserCustomDetailsRepository;
+import homeBudget.repository.UserPhotoRepository;
 import homeBudget.repository.UserRepository;
 import homeBudget.security.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,20 +36,27 @@ import java.util.Set;
 @RequestMapping("/api/auth")
 public class AuthRestAPIs {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
+    private UserRepository userRepository;
+    private UserCustomDetailsRepository userCustomDetailsRepository;
+    private UserPhotoRepository userPhotoRepository;
+    private RoleRepository roleRepository;
+    private PasswordEncoder encoder;
+    private JwtProvider jwtProvider;
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
-    JwtProvider jwtProvider;
+    public AuthRestAPIs(AuthenticationManager authenticationManager, UserRepository userRepository,
+                        UserCustomDetailsRepository userCustomDetailsRepository,
+                        UserPhotoRepository userPhotoRepository, RoleRepository roleRepository,
+                        PasswordEncoder encoder, JwtProvider jwtProvider) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.userCustomDetailsRepository = userCustomDetailsRepository;
+        this.userPhotoRepository = userPhotoRepository;
+        this.roleRepository = roleRepository;
+        this.encoder = encoder;
+        this.jwtProvider = jwtProvider;
+    }
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
@@ -107,6 +119,31 @@ public class AuthRestAPIs {
         user.setRoles(roles);
         user.setActive(true);
         userRepository.save(user);
+
+        //Create User custom details
+        UserCustomDetails userCustomDetails = new UserCustomDetails();
+        userCustomDetails.setUser(user);
+        userCustomDetailsRepository.save(userCustomDetails);
+
+        //Create default user photo
+        try {
+            String defaultPhoto = "static/photo/default-user-image.png";
+            File image = ResourceUtils.getFile("classpath:"+defaultPhoto);
+            byte[] content = null;
+            UserPhoto userPhoto = new UserPhoto();
+
+            Path path = Paths.get(image.getAbsolutePath());
+            content = Files.readAllBytes(path);
+
+            userPhoto.setName(image.getName());
+            userPhoto.setType("image/png");
+            userPhoto.setPic(content);
+            userPhoto.setUser(user);
+
+            userPhotoRepository.save(userPhoto);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return new ResponseEntity<>(new ResponseMessage("User registered successfully!"), HttpStatus.OK);
     }

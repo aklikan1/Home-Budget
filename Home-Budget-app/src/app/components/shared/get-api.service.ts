@@ -7,6 +7,8 @@ import {GetBudgetBasicNames} from '../BudgetComponents/pages/dashboard/model/get
 import {BudgetDetails} from '../BudgetComponents/pages/dashboard/model/budgetDetails';
 import {BasicNamesAndDetailsMoney} from '../BudgetComponents/pages/dashboard/model/basicNamesAndDetailsMoney';
 import {User} from '../BudgetComponents/pages/dashboard/model/user';
+import {UserCustomDetails} from '../BudgetComponents/pages/user/model/UserCustomDetails';
+import {UserPhoto} from '../BudgetComponents/pages/user/model/UserPhoto';
 import {BudgetViewModel} from "../new-budget/new-budget.component";
 
 @Injectable({
@@ -41,6 +43,12 @@ export class GetApiService {
 
   private GET_EXPENSES_NAMES_MONEY_BY_BUDGET_ID = `${this.baseUrl.baseUrl}\\expenses\\namesMoney\\`;
 
+  //User custom details
+  private GET_USER_CUSTOM_DETAILS_BY_USER_ID = `${this.baseUrl.baseUrl}\\userDetails\\user\\`;
+
+  //User photo
+  private GET_USER_PHOTO_BY_USER_ID = `${this.baseUrl.baseUrl}\\photo\\`;
+
   constructor(private http: HttpClient, private baseUrl: BaseUrlService) {}
 
   getAllBudget() : Observable<Budget[]> {
@@ -63,7 +71,7 @@ export class GetApiService {
     return this.http.get<User>(this.GET_USER_BY_USER_ID+id);
   }
 
-  //INCOME URLS
+  //INCOME DATA
 
   getMoneyInTimeByBudgetId (id: number) : Observable<number[][]> {
     return this.http.get<number[][]>(this.GET_DIFFERENCES_INCOME_EXPENSES_MONEY_IN_TIME_BY_BUDGET_ID+id);
@@ -89,7 +97,7 @@ export class GetApiService {
     return this.http.get<BudgetDetails[][]>(this.GET_ALL_INCOME_DETAILS_BY_BUDGET_ID+id);
   }
 
-  //EXPENSES URLS
+  //EXPENSES DATA
 
   getAllExpensesBasicNamesByBudgetId (id: number) : Observable<GetBudgetBasicNames[]> {
     return this.http.get<GetBudgetBasicNames[]>(this.GET_ALL_EXPENSES_BASIC_NAMES_BY_BUDGET_ID+id);
@@ -105,6 +113,16 @@ export class GetApiService {
 
   getExpensesNamesAndMoneyByBudgetId (id: number) : Observable<BasicNamesAndDetailsMoney[]> {
     return this.http.get<BasicNamesAndDetailsMoney[]>(this.GET_EXPENSES_NAMES_MONEY_BY_BUDGET_ID+id);
+  }
+
+  //USER CUSTOM DETAILS DATA
+  getUserCustomDetailsByUserId (id: number): Observable<UserCustomDetails> {
+    return this.http.get<UserCustomDetails>(this.GET_USER_CUSTOM_DETAILS_BY_USER_ID+id);
+  }
+
+  //USER PHOTO DATA
+  getUserPhotoByUserId (id: number): Observable<UserPhoto> {
+    return this.http.get<UserPhoto>(this.GET_USER_PHOTO_BY_USER_ID+id);
   }
 
 }
