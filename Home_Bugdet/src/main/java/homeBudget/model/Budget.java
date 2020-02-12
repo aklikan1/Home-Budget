@@ -1,6 +1,7 @@
 package homeBudget.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import homeBudget.controller.listeners.BudgetListener;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(BudgetListener.class)
 public class Budget {
 
     @Id
@@ -104,5 +106,15 @@ public class Budget {
                 ", incomeBasicNames=" + incomeBasicNames +
                 ", expensesBasicNames=" + expensesBasicNames +
                 '}';
+    }
+
+    //@PostUpdate
+    private void postUpdateBudget() {
+        System.out.println("Test post update Budget");
+    }
+
+    //@PostPersist
+    private void postPersistBudget() {
+        System.out.println("Test post persist Budget");
     }
 }

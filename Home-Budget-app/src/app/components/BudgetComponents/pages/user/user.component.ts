@@ -5,8 +5,8 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {GetApiService} from '../../../shared/get-api.service';
 import {PostApiService} from '../../../shared/post-api.service';
 import {TokenStorageService} from '../../../UIComponents/auth/token-storage.service';
-import {User} from '../dashboard/model/user';
-import {UserCustomDetails} from './model/UserCustomDetails';
+import {User} from '../../model/user';
+import {UserCustomDetails} from '../../model/UserCustomDetails';
 
 @Component({
   selector: "app-user",

@@ -1,17 +1,16 @@
 package homeBudget.model;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import homeBudget.controller.listeners.ExpensesDetailsListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Calendar;
+import java.util.Objects;
 
 @Entity
+@EntityListeners(ExpensesDetailsListener.class)
 public class ExpensesDetails {
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "expenses_details_id")

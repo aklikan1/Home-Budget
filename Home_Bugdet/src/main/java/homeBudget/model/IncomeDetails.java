@@ -1,15 +1,16 @@
 package homeBudget.model;
 
+import homeBudget.controller.listeners.IncomeDetailsListener;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
 
 @Entity
+@EntityListeners({IncomeDetailsListener.class})
 public class IncomeDetails {
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "income_details_id")

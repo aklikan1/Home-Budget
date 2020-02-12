@@ -1,6 +1,7 @@
 package homeBudget.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import homeBudget.controller.listeners.IncomeBasicNameListener;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(IncomeBasicNameListener.class)
 public class IncomeBasicNames {
 
 	@Id

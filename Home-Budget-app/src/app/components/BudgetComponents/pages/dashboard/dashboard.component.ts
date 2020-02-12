@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import Chart from 'chart.js';
 import {GetApiService} from '../../../shared/get-api.service';
 import {TokenStorageService} from '../../../UIComponents/auth/token-storage.service';
-import {BasicNamesAndDetailsMoney} from './model/basicNamesAndDetailsMoney';
-import {Budget} from './model/budget';
+import {BasicNamesAndDetailsMoney} from '../../model/basicNamesAndDetailsMoney';
+import {Budget} from '../../model/budget';
 
 @Component({
   selector: "app-dashboard",

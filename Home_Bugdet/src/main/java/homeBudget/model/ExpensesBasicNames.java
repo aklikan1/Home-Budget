@@ -1,15 +1,16 @@
 package homeBudget.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import homeBudget.controller.listeners.ExpensesBasicNamesListener;
 import org.hibernate.annotations.Cascade;
-
-import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
+@EntityListeners(ExpensesBasicNamesListener.class)
 public class ExpensesBasicNames {
 
 	

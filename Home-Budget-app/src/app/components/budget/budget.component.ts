@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Budget} from "../BudgetComponents/pages/dashboard/model/budget";
+import {Budget} from "../BudgetComponents/model/budget";
 import {GetApiService} from "../shared/get-api.service";
 
 @Component({

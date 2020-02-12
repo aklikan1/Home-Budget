@@ -2,10 +2,10 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {BaseUrlService} from '../../shared/base-url.service';
-import {Budget} from '../BudgetComponents/pages/dashboard/model/budget';
-import {BudgetDetails} from '../BudgetComponents/pages/dashboard/model/budgetDetails';
-import {PostBudgetBasicNames} from '../BudgetComponents/pages/dashboard/model/postBudgetBasicNames';
-import {UserCustomDetails} from '../BudgetComponents/pages/user/model/UserCustomDetails';
+import {Budget} from '../BudgetComponents/model/budget';
+import {BudgetDetails} from '../BudgetComponents/model/budgetDetails';
+import {PostBudgetBasicNames} from '../BudgetComponents/model/postBudgetBasicNames';
+import {UserCustomDetails} from '../BudgetComponents/model/UserCustomDetails';
 
 @Injectable({
   providedIn: 'root'

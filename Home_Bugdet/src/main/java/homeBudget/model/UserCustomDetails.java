@@ -1,6 +1,7 @@
 package homeBudget.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import homeBudget.controller.listeners.UserCustomDetailsListener;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
+@EntityListeners(UserCustomDetailsListener.class)
 public class UserCustomDetails {
 
     @Id

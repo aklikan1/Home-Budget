@@ -74,7 +74,6 @@ public class UserPhotoController {
         User user = userRepository.findById(Long.valueOf(userId.get("userId"))).get();
         UserPhoto img = new UserPhoto(file.getOriginalFilename(), file.getContentType(), file.getBytes(), user);
 
-        System.out.println(file.getContentType());
         if (userPhotoRepository.existsById(user.getId())) {
             img.setId(user.getId());
         }
@@ -85,7 +84,6 @@ public class UserPhotoController {
                 .path("{id}")
                 .buildAndExpand(save.getId())
                 .toUri();
-
 
         return ResponseEntity.created(location).body(img);
     }

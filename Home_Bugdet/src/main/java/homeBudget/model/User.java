@@ -49,6 +49,10 @@ public class User {
     @JsonIgnore
     private List<Budget> budget;
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<History> history;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="user_roles",
                 joinColumns = @JoinColumn(name = "user_id"),
@@ -57,13 +61,15 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     @JsonIgnore
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
-    fetch = FetchType.LAZY, optional = false)
+    //@OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
+    //fetch = FetchType.LAZY, optional = false)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserCustomDetails userCustomDetails;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+    //@OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
+    //        fetch = FetchType.LAZY, optional = false)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserPhoto userPhoto;
 
     public User() {}

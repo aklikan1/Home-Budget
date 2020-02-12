@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {BaseUrlService} from '../../shared/base-url.service';
-import {Budget} from "../BudgetComponents/pages/dashboard/model/budget";
-import {GetBudgetBasicNames} from '../BudgetComponents/pages/dashboard/model/getBudgetBasicNames';
-import {BudgetDetails} from '../BudgetComponents/pages/dashboard/model/budgetDetails';
-import {BasicNamesAndDetailsMoney} from '../BudgetComponents/pages/dashboard/model/basicNamesAndDetailsMoney';
-import {User} from '../BudgetComponents/pages/dashboard/model/user';
-import {UserCustomDetails} from '../BudgetComponents/pages/user/model/UserCustomDetails';
-import {UserPhoto} from '../BudgetComponents/pages/user/model/UserPhoto';
+import {Budget} from "../BudgetComponents/model/budget";
+import {BudgetHistory} from '../BudgetComponents/model/budgetHistory';
+import {GetBudgetBasicNames} from '../BudgetComponents/model/getBudgetBasicNames';
+import {BudgetDetails} from '../BudgetComponents/model/budgetDetails';
+import {BasicNamesAndDetailsMoney} from '../BudgetComponents/model/basicNamesAndDetailsMoney';
+import {User} from '../BudgetComponents/model/user';
+import {UserCustomDetails} from '../BudgetComponents/model/UserCustomDetails';
+import {UserPhoto} from '../BudgetComponents/model/UserPhoto';
 import {BudgetViewModel} from "../new-budget/new-budget.component";
 
 @Injectable({
@@ -48,6 +49,9 @@ export class GetApiService {
 
   //User photo
   private GET_USER_PHOTO_BY_USER_ID = `${this.baseUrl.baseUrl}\\photo\\`;
+
+  //History
+  private GET_ALL_HISTORY_BY_USER_ID = `${this.baseUrl.baseUrl}\\history\\user\\`;
 
   constructor(private http: HttpClient, private baseUrl: BaseUrlService) {}
 
@@ -123,6 +127,11 @@ export class GetApiService {
   //USER PHOTO DATA
   getUserPhotoByUserId (id: number): Observable<UserPhoto> {
     return this.http.get<UserPhoto>(this.GET_USER_PHOTO_BY_USER_ID+id);
+  }
+
+  //HISTORY DATA
+  getAllHistoryByUserId (id: number) : Observable<BudgetHistory[]> {
+    return this.http.get<BudgetHistory[]>(this.GET_ALL_HISTORY_BY_USER_ID + id);
   }
 
 }

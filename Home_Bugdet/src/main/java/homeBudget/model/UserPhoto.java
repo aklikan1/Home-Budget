@@ -1,6 +1,7 @@
 package homeBudget.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import homeBudget.controller.listeners.UserPhotoListener;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @ToString
+@EntityListeners(UserPhotoListener.class)
 public class UserPhoto {
 
    @Id

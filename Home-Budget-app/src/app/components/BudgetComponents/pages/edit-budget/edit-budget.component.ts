@@ -1,7 +1,6 @@
-import {Component, OnInit, PipeTransform, TemplateRef} from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatDatepicker} from '@angular/material/datepicker';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import * as _moment from 'moment';
 import {default as _rollupMoment, Moment} from 'moment';
@@ -10,11 +9,11 @@ import {DeleteApiService} from '../../../shared/delete-api.service';
 import {GetApiService} from '../../../shared/get-api.service';
 import {PostApiService} from '../../../shared/post-api.service';
 import {TokenStorageService} from '../../../UIComponents/auth/token-storage.service';
-import {Budget} from '../dashboard/model/budget';
-import {BudgetDetails} from '../dashboard/model/budgetDetails';
-import {GetBudgetBasicNames} from '../dashboard/model/getBudgetBasicNames';
-import {PostBudgetBasicNames} from '../dashboard/model/postBudgetBasicNames';
-import {User} from '../dashboard/model/user';
+import {Budget} from '../../model/budget';
+import {BudgetDetails} from '../../model/budgetDetails';
+import {GetBudgetBasicNames} from '../../model/getBudgetBasicNames';
+import {PostBudgetBasicNames} from '../../model/postBudgetBasicNames';
+import {User} from '../../model/user';
 import {NotificationsComponent} from '../notifications/notifications.component';
 
 const moment = _rollupMoment || _moment;
@@ -194,7 +193,8 @@ export class EditBudgetComponent implements OnInit {
 
     this.postApiService.postIncomeBasicNames(tempPostIncomeBasicName).subscribe(
       value => {
-        this.createNewGetBasicName(value, this.incomeBasicNames, this.incomeDetails, this.incomeActualMoney, nameMessage);
+        this.createNewGetBasicName(value, this.incomeBasicNames, this.incomeDetails, this.incomeDetailsCheckDate,
+          this.incomeActualMoney, nameMessage);
       }
     );
   }
@@ -205,7 +205,8 @@ export class EditBudgetComponent implements OnInit {
 
     this.postApiService.postExpensesBasicNames(tempPostExpensesBasicName).subscribe(
       value => {
-        this.createNewGetBasicName(value, this.expensesBasicNames, this.expensesDetails, this.expensesActualMoney, nameMessage);
+        this.createNewGetBasicName(value, this.expensesBasicNames, this.expensesDetails, this.expensesDetailsCheckDate,
+          this.expensesActualMoney, nameMessage);
       }
     );
 
@@ -223,9 +224,10 @@ export class EditBudgetComponent implements OnInit {
   }
 
   createNewGetBasicName (tempPostExpensesBasicName: PostBudgetBasicNames, basicNames: GetBudgetBasicNames[],
-                         details: BudgetDetails[][], actualMoney: number[], nameMessage: string) {
+                         details: BudgetDetails[][], showDetails: BudgetDetails[][], actualMoney: number[], nameMessage: string) {
     let tempGetBasicNames: GetBudgetBasicNames = new GetBudgetBasicNames();
     let tempBudgetDetails: BudgetDetails[] = [];
+    let tempShowBudgetDetails: BudgetDetails[] = [];
 
     tempGetBasicNames.id = tempPostExpensesBasicName.id;
     tempGetBasicNames.estimated_money = tempPostExpensesBasicName.estimated_money;
@@ -238,7 +240,7 @@ export class EditBudgetComponent implements OnInit {
 
     basicNames.push(tempGetBasicNames);
     details.push(tempBudgetDetails);
-
+    showDetails.push(tempShowBudgetDetails);
     //Notification
     this.notificationWhenAddNewDataSuccess(nameMessage);
   }
@@ -254,6 +256,8 @@ export class EditBudgetComponent implements OnInit {
   postAddNewIncomeDetails (actualBasicName: GetBudgetBasicNames, actualBasicNameIndex: number) {
     let tempBudgetDetail = this.createNewDetailsTemplate(actualBasicName);
     let nameMessage = "income detail";
+
+    //TODO check why incomeDetailsCheckDate doesn't create instance
 
     this.postApiService.postIncomeBudgetDetails(tempBudgetDetail).subscribe(
       value => {
@@ -657,7 +661,7 @@ export class EditBudgetComponent implements OnInit {
         setActualDate(this.incomeDateCtrl);
         this.isIncomeMonthAndYearIsActual =
           this.checkAndChangeDateIsActualMonthAndYear(this.incomeDetails, this.incomeDetailsCheckDate, this.incomeDateCtrl.value);
-        this.checkAndChangeDateIsActualMonthAndYear(this.incomeDetails, this.incomeDetailsCheckDate, this.incomeDateCtrl.value);
+        this.reloadEstimatedMoneyInBasicNames(this.incomeActualMoney, this.incomeDetailsCheckDate);
         break;
       }
       case this.EXPENSES_CATEGORY: {

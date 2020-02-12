@@ -24,20 +24,20 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: "/budget/icons",
-    title: "icons",
+    title: "icons (DELETE)",
     rtlTitle: "الرموز",
     icon: "icon-atom",
     class: ""
   },
   {
     path: "/budget/maps",
-    title: "Maps (TODO)",
+    title: "Maps (DOING)",
     rtlTitle: "خرائط",
     icon: "icon-pin",
     class: "" },
   {
     path: "/budget/notifications",
-    title: "Notifications",
+    title: "Notifications (CLEAN)",
     rtlTitle: "إخطارات",
     icon: "icon-bell-55",
     class: ""
@@ -45,21 +45,21 @@ export const ROUTES: RouteInfo[] = [
 
   {
     path: "/budget/user",
-    title: "User Profile (DOING)",
+    title: "User Profile (CLEAN)",
     rtlTitle: "ملف تعريفي للمستخدم",
     icon: "icon-single-02",
     class: ""
   },
   {
     path: "/budget/tables",
-    title: "History List (TODO)",
+    title: "History List (CLEAN)",
     rtlTitle: "قائمة الجدول",
     icon: "icon-puzzle-10",
     class: ""
   },
   {
     path: "/budget/typography",
-    title: "Typography",
+    title: "Typography (DELETE)",
     rtlTitle: "طباعة",
     icon: "icon-align-center",
     class: ""
