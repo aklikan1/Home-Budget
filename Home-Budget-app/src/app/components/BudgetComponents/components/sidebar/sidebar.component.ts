@@ -31,7 +31,7 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: "/budget/maps",
-    title: "Maps (DOING)",
+    title: "Maps (DELETE)",
     rtlTitle: "خرائط",
     icon: "icon-pin",
     class: "" },

@@ -1,4 +1,6 @@
 import { Component, OnInit, ElementRef, OnDestroy } from "@angular/core";
+import {GetApiService} from '../../../shared/get-api.service';
+import {TokenStorageService} from '../../../UIComponents/auth/token-storage.service';
 import { ROUTES } from "../sidebar/sidebar.component";
 import { Location } from "@angular/common";
 import { Router } from "@angular/router";
@@ -19,13 +21,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   public isCollapsed = true;
 
-  closeResult: string;
+  private userId: number;
+  public userPhotoImgUrl: string = '';
 
   constructor(
     location: Location,
     private element: ElementRef,
     private router: Router,
-    private modalService: NgbModal )
+    private getApiService: GetApiService,
+    private tokenStorage: TokenStorageService)
   {
     this.location = location;
     this.sidebarVisible = false;
@@ -55,6 +59,21 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.mobile_menu_visible = 0;
       }
     });
+
+    this.getUserId();
+    this.getUserPhoto();
+  }
+
+  getUserId() {
+    this.userId = Number(this.tokenStorage.getUserId());
+  }
+
+  getUserPhoto() {
+    this.getApiService.getUserPhotoByUserId(this.userId).subscribe(
+      photo => {
+        this.userPhotoImgUrl = 'data:image/png;base64,'+photo.pic;
+      }
+    );
   }
 
   collapse() {
@@ -177,26 +196,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return "Dashboard";
   }
 
-  open(content) {
-    this.modalService.open(content, {windowClass: 'modal-search'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-      }, (reason) => {
-      this.closeResult = `Dismissed ${NavbarComponent.getDismissReason(reason)}`;
-    });
-  }
-
-  private static getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return  `with: ${reason}`;
-    }
+  logout() {
+    this.tokenStorage.signOut();
+    window.location.replace("./");
   }
 
   ngOnDestroy(){
     window.removeEventListener("resize", this.updateColor);
   }
-
 }

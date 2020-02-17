@@ -5,6 +5,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {GetApiService} from '../../../shared/get-api.service';
 import {PostApiService} from '../../../shared/post-api.service';
 import {TokenStorageService} from '../../../UIComponents/auth/token-storage.service';
+import {NavbarComponent} from '../../components/navbar/navbar.component';
 import {User} from '../../model/user';
 import {UserCustomDetails} from '../../model/UserCustomDetails';
 
@@ -23,7 +24,7 @@ export class UserComponent implements OnInit {
   private tempJob: string;
   private photoDescriptions: string;
   private tempPhotoDesc: string;
-  private userPhotoImgUrl: any = '';
+  private userPhotoImgUrl: string = '';
 
   //Photo
   public selectedFile: File;
@@ -98,6 +99,9 @@ export class UserComponent implements OnInit {
         if (this.selectedFile != null) {
           this.onUpload(this.selectedFile, this.userId);
           this.userPhotoImgUrl = this.imgURL;
+          let navbar: HTMLElement = document.getElementsByTagName("nav")[0];
+          let mainPhoto: Element = navbar.getElementsByClassName("avatar")[0];
+          console.log(mainPhoto.setAttribute("src", this.imgURL));
         }
         this.userCustomDetails.job = this.tempJob;
         this.userCustomDetails.photoDescriptions = this.tempPhotoDesc;
