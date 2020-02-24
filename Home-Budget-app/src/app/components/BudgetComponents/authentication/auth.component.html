@@ -1,0 +1,70 @@
+<div class="content">
+  <div class=" row">
+    <div class=" col-md-6">
+      <div class=" card">
+        <div class=" card-header">
+          <h5 class="card-title">Please login</h5>
+        </div>
+        <div class=" card-body">
+          <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f='ngForm' novalidate>
+            <div class=" row">
+              <div class=" col-md-11 pr-md-1">
+              <div class="form-group">
+                <div class="input-group input-lg" [ngClass]="{'input-group-focus':focus===true}">
+                  <input type="text" class="form-control" name="username" [(ngModel)]="form.username"
+                         #username='ngModel' required minlength="3" placeholder="Username" (focus)="focus=true" (blur)="focus=false" >
+                </div>
+                <div *ngIf="f.submitted && username.invalid">
+                  <div *ngIf="username.errors.required" class="text-danger-states">Username is required!</div>
+                  <div *ngIf="username.errors.minlength" class="text-danger-states">Username must be at least 3 characters!</div>
+                </div>
+              </div>
+              </div>
+            </div>
+
+            <div class=" row">
+              <div class=" col-md-11 pr-md-1">
+                <div class=" form-group">
+                  <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus1===true}">
+                    <input type="password" placeholder="Password" class="form-control" name="password" [(ngModel)]="form.password"
+                           #password="ngModel" required minlength="6" (focus)="focus1=true" (blur)="focus1=false"/>
+                  </div>
+                  <div *ngIf="f.submitted && password.invalid">
+                    <div *ngIf="password.errors.required" class="text-danger-states">Password is required!</div>
+                    <div *ngIf="password.errors.minlength" class="text-danger-states">Password must be at least 6 characters!</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 pr-md-1">
+                <div class="form-group">
+                  <button class="btn btn-primary btn-round btn-lg btn-block">Login</button>
+                  <div *ngIf="f.submitted && isLoginFailed" class="alert alert-danger">
+                    Login failed: {{errorMessage}}!
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </form>
+
+          <div class="row">
+            <div class="col-md-11 pr-md-1">
+              <div class="pull-left">
+                <h6>
+                  <a [routerLink]="['/signup']" class="link">Create Account</a>
+                </h6>
+              </div>
+              <div class="pull-right">
+                <button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Need Help?</button>>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

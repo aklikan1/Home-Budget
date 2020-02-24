@@ -28,12 +28,12 @@ const routes: Routes = [
   //{ path:'', component:BudgetComponent, pathMatch:'full' },
   //{ path:'', redirectTo:'home', pathMatch:'full' },
 
-  { path: '', redirectTo: 'index', pathMatch: 'full' },
+  { path: '', redirectTo: 'budget', pathMatch: 'full' },
   { path: 'index',                component: UIComponentsComponent },
   { path: 'nucleoicons',          component: NucleoiconsComponent },
   { path: 'examples/landing',     component: LandingComponent },
   { path: 'examples/profile',     component: ProfileComponent },
-  { path: 'budget', redirectTo: 'budget/dashboard', pathMatch: 'full' },
+  //{ path: 'budget', redirectTo: 'budget/dashboard', pathMatch: 'full' },
   {
     path: "",
     component: AdminLayoutComponent,

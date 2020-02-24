@@ -1,3 +1,4 @@
+import {APP_BASE_HREF, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -12,6 +13,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {AdminComponent} from './components/admin/admin.component';
+import {ROUTES, SidebarComponent} from './components/BudgetComponents/components/sidebar/sidebar.component';
+import {AdminLayoutRoutes} from './components/BudgetComponents/layouts/admin-layout/admin-layout.routing';
 
 import {httpInterceptorProviders} from './components/UIComponents/auth/auth-interceptor';
 import {BudgetComponent} from './components/budget/budget.component';
@@ -22,7 +25,6 @@ import {PmComponent} from './components/pm/pm.component';
 import {UIComponentsModule} from './components/UIComponents/UIComponents.module';
 import {UserComponent} from './components/user/user.component';
 import {ExamplesModule} from './examples/examples.module';
-import {BudgetNavbarComponent} from './shared/Navbar/budget-navbar/budget-navbar.component';
 import {UiNavbarComponent} from './shared/Navbar/ui-navbar/ui-navbar.component';
 
 @NgModule({
@@ -35,7 +37,6 @@ import {UiNavbarComponent} from './shared/Navbar/ui-navbar/ui-navbar.component';
     PmComponent,
     AdminComponent,
     UiNavbarComponent,
-    BudgetNavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +50,10 @@ import {UiNavbarComponent} from './shared/Navbar/ui-navbar/ui-navbar.component';
     RouterModule,
     BudgetComponentsModule
   ],
-  providers: [httpInterceptorProviders],
+  providers: [
+    httpInterceptorProviders,
+    {provide: LocationStrategy, useClass: PathLocationStrategy}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

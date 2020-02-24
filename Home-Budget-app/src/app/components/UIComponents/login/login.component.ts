@@ -47,7 +47,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.form);
 
     this.loginInfo = new AuthLoginInfo(
       this.form.username,

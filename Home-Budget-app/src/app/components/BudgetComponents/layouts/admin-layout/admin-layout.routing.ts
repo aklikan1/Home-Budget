@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router";
+import {AuthComponent} from '../../authentication/auth.component';
 
 import { DashboardComponent } from "../../pages/dashboard/dashboard.component";
 import { EditBudgetComponent } from '../../pages/edit-budget/edit-budget.component';
@@ -17,5 +18,6 @@ export const AdminLayoutRoutes: Routes = [
   { path: "notifications", component: NotificationsComponent },
   { path: "user", component: UserComponent },
   { path: "tables", component: HistoryComponent },
-  { path: "typography", component: TypographyComponent }
+  { path: "typography", component: TypographyComponent },
+  { path: "", component: AuthComponent}
 ];

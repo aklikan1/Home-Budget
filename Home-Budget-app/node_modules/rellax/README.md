@@ -49,6 +49,24 @@ Have any suggestions or feedback? Reach out [@dixonandmoe](https://twitter.com/d
 ### Speed
 Use the `data-rellax-speed` attribute to set the speed of a `.rellax` element to something other than the default value (which is `-2`). A negative value will make it move slower than regular scrolling, and a positive value will make it move faster. We recommend keeping the speed between `-10` and `10`.
 
+#### Responsive Speed
+Use responsive speed attributes for breakpoint levels that require a different speed. Defaults to the `data-rellax-speed` setting in unspecified breakpoints.
+```html
+<div class="rellax" data-rellax-speed="7" data-rellax-xs-speed="-5" data-rellax-mobile-speed="3" data-rellax-tablet-speed="-8" data-rellax-desktop-speed="1">
+  I parallax at all different speeds depending on your screen width.
+</div>
+```
+
+Pass an array of breakpoints (mobile, tablet and desktop respectively).
+```html
+<script>
+  // This is the default setting
+  var rellax = new Rellax('.rellax', {
+    breakpoints: [576, 768, 1201]
+  });
+</script>
+```
+
 ### Centering
 After some fantastic work from [@p-realinho](https://github.com/p-realinho), we just released the ability to center parallax elements in your viewport! We'll be building a nice demo website, but for now check out the tests folder for several examples of how it works.
 
@@ -90,7 +108,7 @@ This feature is intended for panoramic style websites, where users scroll horizo
 Note that this can work together at the same time with the default vertical parallax. If you do not want this, pass `vertical: false` in the settings block.
 
 ### Custom Wrapper
-By default, the position of parallax elements is determined via the scroll position of the body. Passing in the `wrapper` property will tell Rellax to watch that element instead. 
+By default, the position of parallax elements is determined via the scroll position of the body. Passing in the `wrapper` property will tell Rellax to watch that element instead.
 ```html
 <script>
   // Set wrapper to .custom-element instead of the body
