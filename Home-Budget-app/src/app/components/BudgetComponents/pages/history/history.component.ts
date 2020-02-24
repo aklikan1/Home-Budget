@@ -1,5 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatTableDataSource} from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import {GetApiService} from '../../../shared/get-api.service';
 import {TokenStorageService} from '../../../UIComponents/auth/token-storage.service';
 import {BudgetHistory} from '../../model/budgetHistory';

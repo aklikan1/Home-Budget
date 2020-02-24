@@ -9,7 +9,7 @@ import {UiNavbarComponent} from './shared/Navbar/ui-navbar/ui-navbar.component';
 })
 export class AppComponent implements OnInit {
   private _router: Subscription;
-  @ViewChild(UiNavbarComponent, {static: false}) navbar: UiNavbarComponent;
+  @ViewChild(UiNavbarComponent) navbar: UiNavbarComponent;
 
   constructor() {}
 

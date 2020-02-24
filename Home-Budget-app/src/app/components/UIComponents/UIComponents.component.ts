@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgbAccordionConfig } from '@ng-bootstrap/ng-bootstrap';
 import * as Rellax from 'rellax';
@@ -26,7 +26,7 @@ export class UIComponentsComponent implements OnInit, OnDestroy {
   date: {year: number, month: number};
   model: NgbDateStruct;
 
-  constructor( private renderer : Renderer, config: NgbAccordionConfig, public nav: NavbarService) {
+  constructor( private renderer : Renderer2, config: NgbAccordionConfig, public nav: NavbarService) {
     config.closeOthers = true;
     config.type = 'info';
   }
