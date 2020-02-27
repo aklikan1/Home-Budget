@@ -14,7 +14,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {AdminComponent} from './components/admin/admin.component';
-import {ROUTES, SidebarComponent} from './components/BudgetComponents/components/sidebar/sidebar.component';
+import {ROUTES_AUTH, SidebarComponent} from './components/BudgetComponents/components/sidebar/sidebar.component';
 import {AdminLayoutRoutes} from './components/BudgetComponents/layouts/admin-layout/admin-layout.routing';
 
 import {httpInterceptorProviders} from './components/UIComponents/auth/auth-interceptor';

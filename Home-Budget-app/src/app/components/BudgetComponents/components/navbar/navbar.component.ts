@@ -1,10 +1,9 @@
-import { Component, OnInit, ElementRef, OnDestroy } from "@angular/core";
+import {Location} from '@angular/common';
+import {Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {GetApiService} from '../../../shared/get-api.service';
 import {TokenStorageService} from '../../../UIComponents/auth/token-storage.service';
-import { ROUTES } from "../sidebar/sidebar.component";
-import { Location } from "@angular/common";
-import { Router } from "@angular/router";
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import {ROUTES_AUTH} from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-navbar',
@@ -48,7 +47,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     window.addEventListener("resize", this.updateColor);
-    this.listTitles = ROUTES.filter(listTitle => listTitle);
+    this.listTitles = ROUTES_AUTH.filter(listTitle => listTitle);
     const navbar: HTMLElement = this.element.nativeElement;
     this.toggleButton = navbar.getElementsByClassName("navbar-toggler")[0];
     this.router.events.subscribe(event => {

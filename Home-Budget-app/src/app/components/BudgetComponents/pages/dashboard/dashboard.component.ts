@@ -205,10 +205,6 @@ export class DashboardComponent implements OnInit {
 
     var myChart = new Chart(this.ctx, {
       type: 'bar',
-      responsive: true,
-      legend: {
-        display: false
-      },
       data: {
         labels: ['USA', 'GER', 'AUS', 'UK', 'RO', 'BR'],
         datasets: [{
@@ -273,6 +269,7 @@ export class DashboardComponent implements OnInit {
 
   private createIncomeDetailsBarChart () {
     let incomeDetailsCanvas: any = document.getElementById("IncomeDetailsBarChart");
+    console.log(document.getElementById("IncomeDetailsBarChart"));
     let incomeDetailsCtx  = incomeDetailsCanvas.getContext("2d");
     let incomeDetailsGradientStroke = incomeDetailsCtx.createLinearGradient(0, 230, 0, 50);
 
@@ -282,10 +279,6 @@ export class DashboardComponent implements OnInit {
 
     this.incomeDetailsBarChart = new Chart(incomeDetailsCtx, {
       type: 'bar',
-      responsive: true,
-      legend: {
-        display: false
-      },
       data: {
         labels: this.incomeDetailsChartLabels,
         datasets: [
@@ -316,10 +309,6 @@ export class DashboardComponent implements OnInit {
 
     this.expensesDetailsBarChart = new Chart(expensesDetailsCtx, {
       type: 'bar',
-      responsive: true,
-      legend: {
-        display: false
-      },
       data: {
         labels: this.expensesDetailsChartLabel,
         datasets: [{

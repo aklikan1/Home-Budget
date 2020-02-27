@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import {NavbarService} from '../../../../shared/Navbar/navbar.service';
+import {TokenStorageService} from '../../../UIComponents/auth/token-storage.service';
 
 @Component({
   selector: "app-admin-layout",
@@ -9,7 +10,7 @@ import {NavbarService} from '../../../../shared/Navbar/navbar.service';
 export class AdminLayoutComponent implements OnInit {
   public sidebarColor: string = "red";
 
-  constructor(private uiNavbarService: NavbarService) {}
+  constructor(private tokenStorage: TokenStorageService) {}
   changeSidebarColor(color){
     var sidebar = document.getElementsByClassName('sidebar')[0];
     var mainPanel = document.getElementsByClassName('main-panel')[0];
@@ -23,16 +24,10 @@ export class AdminLayoutComponent implements OnInit {
       mainPanel.setAttribute('data',color);
     }
   }
-  changeDashboardColor(color){
-    var body = document.getElementsByTagName('body')[0];
-    if (body && color === 'white-content') {
-      body.classList.add(color);
-    }
-    else if(body.classList.contains('white-content')) {
-      body.classList.remove('white-content');
-    }
-  }
+
   ngOnInit() {
-    this.uiNavbarService.hide();
+    if (!this.tokenStorage.getToken() && location.pathname != "/budget/login" && location.pathname != "/budget/register") {
+      location.replace("/budget/login");
+    }
   }
 }

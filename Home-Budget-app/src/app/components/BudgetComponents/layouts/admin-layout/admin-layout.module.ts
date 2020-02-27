@@ -12,7 +12,7 @@ import { MatTableModule } from '@angular/material/table';
 import {MatMomentDateModule, MomentDateModule} from '@angular/material-moment-adapter';
 import {RouterModule} from '@angular/router';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {AuthComponent} from '../../authentication/auth.component';
+import {LoginComponent} from '../../authentication/login/login.component';
 import {DashboardComponent} from '../../pages/dashboard/dashboard.component';
 import {EditBudgetComponent} from '../../pages/edit-budget/edit-budget.component';
 import {HistoryComponent} from '../../pages/history/history.component';
@@ -23,6 +23,7 @@ import {TypographyComponent} from '../../pages/typography/typography.component';
 import {UserComponent} from '../../pages/user/user.component';
 import {AdminLayoutRoutes} from './admin-layout.routing';
 import {MY_FORMATS} from './constProviders/monthYearDateFormat';
+import { RegisterComponent } from '../../authentication/register/register.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import {MY_FORMATS} from './constProviders/monthYearDateFormat';
     NotificationsComponent,
     MapComponent,
     EditBudgetComponent,
-    AuthComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     CommonModule,

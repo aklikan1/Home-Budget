@@ -18,6 +18,7 @@
     "@angular/compiler": "^9.0.2",
     "@angular/core": "^9.0.2",
     "@angular/forms": "^9.0.2",
+    "@angular/localize": "^9.0.3",
     "@angular/material": "^9.1.0",
     "@angular/material-moment-adapter": "^9.1.0",
     "@angular/platform-browser": "^9.0.2",
@@ -65,6 +66,6 @@
     "protractor": "^5.4.3",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
-    "typescript": "^3.8.2"
+    "typescript": "^3.7.5"
   }
 }
