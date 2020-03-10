@@ -1,0 +1,6 @@
+<h1>List of all budgets</h1>
+<ul>
+    <li ng-repeat="list in budgetCtrl.allBudgets">
+        <a href="#!details/{{list.id}}">{{list.id}}: {{list.name}}</a>
+    </li>
+</ul>

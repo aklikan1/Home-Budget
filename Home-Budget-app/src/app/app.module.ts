@@ -1,10 +1,7 @@
-import {APP_BASE_HREF, LocationStrategy, PathLocationStrategy} from '@angular/common';
+import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy, PathLocationStrategy, PlatformLocation} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import {MomentDateModule} from '@angular/material-moment-adapter';
+import {FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -13,31 +10,19 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {AdminComponent} from './components/admin/admin.component';
-import {ROUTES_AUTH, SidebarComponent} from './components/BudgetComponents/components/sidebar/sidebar.component';
-import {AdminLayoutRoutes} from './components/BudgetComponents/layouts/admin-layout/admin-layout.routing';
 
-import {httpInterceptorProviders} from './components/UIComponents/auth/auth-interceptor';
-import {BudgetComponent} from './components/budget/budget.component';
-import {BudgetComponentsModule} from './components/BudgetComponents/budget-components.module';
-import {NewBudgetComponent} from './components/new-budget/new-budget.component';
+import {httpInterceptorProviders} from './components/services/auth/auth-interceptor';
 import {NotFoundComponent} from './components/not-found/not-found.component';
-import {PmComponent} from './components/pm/pm.component';
-import {UIComponentsModule} from './components/UIComponents/UIComponents.module';
-import {UserComponent} from './components/user/user.component';
-import {ExamplesModule} from './examples/examples.module';
-import {UiNavbarComponent} from './shared/Navbar/ui-navbar/ui-navbar.component';
+import {AdminLayoutComponent} from './components/admin-layout/admin-layout.component';
+import {AdminLayoutModule} from './components/admin-layout/admin-layout.module';
+import {ComponentsModule} from './components/navigation/components.module';
+import {ToastrModule} from 'ngx-toastr';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BudgetComponent,
-    NewBudgetComponent,
     NotFoundComponent,
-    UserComponent,
-    PmComponent,
-    AdminComponent,
-    UiNavbarComponent,
+    AdminLayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -46,14 +31,20 @@ import {UiNavbarComponent} from './shared/Navbar/ui-navbar/ui-navbar.component';
     FormsModule,
     BrowserAnimationsModule,
     NgbModule,
-    UIComponentsModule,
-    ExamplesModule,
     RouterModule,
-    BudgetComponentsModule
+    AdminLayoutModule,
+    ComponentsModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     httpInterceptorProviders,
-    {provide: LocationStrategy, useClass: PathLocationStrategy}
+    {provide: LocationStrategy, useClass: PathLocationStrategy},
+    //{provide: LocationStrategy, useClass: HashLocationStrategy},
+    {
+      provide: APP_BASE_HREF,
+      useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
+      deps: [PlatformLocation]
+    }
   ],
   bootstrap: [AppComponent]
 })

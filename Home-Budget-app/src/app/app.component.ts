@@ -1,6 +1,6 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {UiNavbarComponent} from './shared/Navbar/ui-navbar/ui-navbar.component';
+import {APP_BASE_HREF} from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +8,9 @@ import {UiNavbarComponent} from './shared/Navbar/ui-navbar/ui-navbar.component';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  private _router: Subscription;
-  @ViewChild(UiNavbarComponent) navbar: UiNavbarComponent;
 
-  constructor() {}
+
 
   ngOnInit() {
-
   }
 }

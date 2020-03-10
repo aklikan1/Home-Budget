@@ -1,0 +1,126 @@
+<div class="content">
+  <!-- Budget button -->
+  <div class="row" >
+    <div class="col-3">
+      <div class="btn-group" ngbDropdown>
+        <button ngbDropdownToggle class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Budget: {{mainBudgetName}}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" ngbDropdownMenu>
+          <button *ngFor="let budget of budgets" type="button" class="dropdown-item"
+                  (click)="changeMainBudget(budget.name);totalMoneyInTimeByBudgetId(budget.id);incomeNamesMoneyByBudgetId (budget.id);
+                  expensesNamesMoneyByBudgetId(budget.id)">
+            {{budget.name}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Total changes line chart -->
+  <div class=" row">
+    <div class=" col-12">
+      <div class="card card-chart">
+        <div class=" card-header">
+          <div class=" row">
+            <div class=" col-sm-6 text-left">
+              <h5 class=" card-category">Total Changes Performance</h5>
+              <h2 class=" card-title"><i class=" tim-icons icon-coins" style="color: #1f8ef1"> </i> {{totalChangesFinalMoney}} PLN</h2>
+            </div>
+            <div class=" col-sm-6">
+              <div
+                class=" btn-group btn-group-toggle float-right"
+                data-toggle="buttons"
+              >
+                <label class=" btn btn-sm btn-simple" style="color:#1f8ef1;"
+                       (click)="totalChangesUpdateOptions(0, DAY_LABEL, true, false, false);"
+                       [ngClass]="{'active':dailyActiveButton===true}">
+                  <input checked="checked" name="options" type="radio" />
+
+                  <span
+                    class=" d-none d-sm-block d-md-block d-lg-block d-xl-block"
+                  >
+                    Daily
+                  </span>
+                  <span class=" d-block d-sm-none">
+                    <i class=" tim-icons icon-single-02"> </i>
+                  </span>
+                </label>
+                <label class=" btn btn-sm btn-simple" style="color:#1f8ef1;"
+                       (click)="totalChangesUpdateOptions(1, WEEK_LABEL, false, true, false);"
+                       [ngClass]="{'active':weeklyActiveButton===true}">
+                  <input
+                    class=" d-none d-sm-none"
+                    name="options"
+                    type="radio"
+                  />
+
+                  <span
+                    class=" d-none d-sm-block d-md-block d-lg-block d-xl-block"
+                  >
+                    Weekly
+                  </span>
+                  <span class=" d-block d-sm-none">
+                    <i class=" tim-icons icon-gift-2"> </i>
+                  </span>
+                </label>
+                <label class=" btn btn-sm btn-simple" style="color:#1f8ef1;"
+                       (click)="totalChangesUpdateOptions(2,MONTH_LABEL, false, false, true);"
+                       [ngClass]="{'active':monthlyActiveButton===true}">
+                  <input class=" d-none" name="options" type="radio" />
+
+                  <span
+                    class=" d-none d-sm-block d-md-block d-lg-block d-xl-block"
+                  >
+                    Monthly
+                  </span>
+                  <span class=" d-block d-sm-none">
+                    <i class=" tim-icons icon-tap-02"> </i>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class=" card-body">
+          <div class=" chart-area"><canvas id="totalChangesChart"> </canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Income Details bar chart -->
+  <div class="row">
+    <div class=" col-lg-12">
+      <div class=" card card-chart">
+        <div class=" card-header">
+          <h5 class=" card-category">Income Details</h5>
+          <h3 class=" card-title">
+            <i class=" tim-icons icon-minimal-up text-success"></i> {{incomeDetailsFinalMoney}} PLN
+          </h3>
+        </div>
+        <div class=" card-body">
+          <div class=" chart-area"><canvas id="IncomeDetailsBarChart"> </canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Expenses Details bar chart -->
+  <div class="row">
+    <div class=" col-lg-12">
+      <div class=" card card-chart">
+        <div class=" card-header">
+          <h5 class=" card-category">Expenses Details</h5>
+          <h3 class=" card-title">
+            <i class=" tim-icons icon-minimal-down text-danger"> </i> {{expensesDetailsFinalMoney}} PLN
+          </h3>
+        </div>
+        <div class=" card-body">
+          <div class=" chart-area"><canvas id="ExpensesDetailsBarChart"> </canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

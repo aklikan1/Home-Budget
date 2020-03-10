@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html ng-app="register" lang="pl-PL" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+    <div ng-controller="UserRegisterController as registerCtrl">
+        <form>
+            <input type="text" ng-model="registerCtrl.newUser.username" placeholder="Username"><br>
+            <input type="password" ng-model="registerCtrl.newUser.password" placeholder="Password"><br>
+            <input type="text" ng-model="registerCtrl.newUser.descriptions" placeholder="Descriptions"><br>
+            <button type="button" ng-click="registerCtrl.saveNewUser()">Register</button>
+        </form>
+    </div>
+
+    <script type="text/javascript" src="js/lib/angular/angular.js"></script>
+    <script type="text/javascript" src="js/lib/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="js/lib/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="js/register.js"></script>
+</body>
+</html>
